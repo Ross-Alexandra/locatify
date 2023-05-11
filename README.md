@@ -14,6 +14,8 @@ LICENSE_KEY=123abc_this_is_my_license_key
 ```
 
 ## Using Docker
+__WARNING:__ Due to Docker having its own filesystem, using the `MMDB_PATH` environment variable is unsupported when working with docker.
+
 The easiest way to run this project is to use Docker. This project is configured to run using Docker Compose, so all you need to do is run the following command from the root of the project:
 ```bash
 docker-compose up
@@ -82,6 +84,8 @@ Once the API has access to a `.mmdb` file, it will be accessible at [localhost:3
     "city": "string <city_name>",
     "time_zone": "string <time_zone>",
     "accuracy_radius": "int <accuracy_radius>",
+    "latitude": "float <latitude>",
+    "longitude": "float <longitude>"
   }
   ```
 - If `<ip_address>` is invalid, then a `400` response is returned with the following JSON:
@@ -97,7 +101,7 @@ Once the API has access to a `.mmdb` file, it will be accessible at [localhost:3
   }
   ```
 
-### POST `/ip/bulk`
+### POST `/ips`
 Body
 ```
 {
@@ -118,6 +122,8 @@ Body
             "city": "string <city_name>",
             "time_zone": "string <time_zone>",
             "accuracy_radius": "int <accuracy_radius>",
+            "latitude": "float <latitude>",
+            "longitude": "float <longitude>"
         },
         {
             "error": "string <error_message>"
