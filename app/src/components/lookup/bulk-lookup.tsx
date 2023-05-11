@@ -186,7 +186,7 @@ export const BulkLookup: React.FC<BulkLookupProps> = ({
                     as='link' 
                     to='/lookup'
                     className='secondary'
-                    title="Upload and search many IPs at once"
+                    title="Manually enter IPs to search"
                 >
                     <ManualIcon color="var(--primary-color)" size={24} />
                     Manual
@@ -202,7 +202,7 @@ export const BulkLookup: React.FC<BulkLookupProps> = ({
                 */}
                 <Button
                     disabled={filledIps.length === 0}
-                    title={filledIps.length === 0 ? 'Upload a file with ips to process' : undefined}
+                    title={filledIps.length === 0 ? 'Upload a file with IPs to process' : undefined}
                     onClick={() => onLookup([])}
                 >
                     <SearchIcon color="var(--background-color)" size={24} />
