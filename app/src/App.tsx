@@ -1,15 +1,13 @@
-import { api } from './services';
- 
+import { Body, Footer } from './components/layout';
+import { LookupView } from './pages/lookup-view';
+
 export function App() {
     return (
-        <div>
-            <p>Start Hacking!</p>
-            <button
-                onClick={async () => {
-                    const response = await api.get('/health-check');
-                    console.log(response);
-                }}
-            >Health Check</button>
-        </div>
+        <>
+            <Body>
+                <LookupView />
+            </Body>
+            <Footer />
+        </>
     );
 }
