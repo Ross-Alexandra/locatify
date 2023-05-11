@@ -58,6 +58,9 @@ const Wrapper = styled.div`
 
             max-height: 300px;
             overflow-y: auto;
+            
+            scrollbar-width: thin;
+            scrollbar-color: var(--border-color) var(--layer-color);
 
             @media (max-width: ${theme.breakpoints.mobile}) {
                 max-height: 300px;
