@@ -24,7 +24,6 @@ def path_exists_but_not_file():
 def download_mmdb_file():
     try:
         download_url = f"https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key={license}&suffix=tar.gz"
-        print(f"Downloading MaxMind database file from {download_url}...")
         handle = requests.get(download_url, stream=True)
         file = tarfile.open(fileobj=handle.raw, mode="r|gz")
         file.extractall(path="/maxmind-db/tmp")
@@ -43,18 +42,28 @@ def download_mmdb_file():
     shutil.move(mmdb_files[0], default_mmdb_path)
     shutil.rmtree("/maxmind-db/tmp")
 
-    print("MaxMind database file downloaded successfully.")
-
 
 def get_mmdb_location():
     if license is None and mmdb_path is None:
         no_license_no_path()
 
     elif mmdb_path is not None:
-        if not os.path.exists(mmdb_path):
-            path_exists_but_not_file()
-        else:
+        # If the file exists, return the path.
+        if os.path.exists(mmdb_path):
             return mmdb_path
+
+        # Otherwise, if the license is set, then we can
+        # fallback to downloading the file.
+        elif bool(license):
+            if not os.path.exists(default_mmdb_path):
+                download_mmdb_file()
+
+            return default_mmdb_path
+
+        # Otherwise, the file doesn't exist, and the license
+        # is not set, so we can't do anything. Throw an Exception.
+        else:
+            path_exists_but_not_file()
 
     elif license is not None:
         if not os.path.exists(default_mmdb_path):
