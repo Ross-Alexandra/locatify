@@ -1,5 +1,5 @@
 flask
 flask_cors
 geoip2
-
 python-dotenv
+black
