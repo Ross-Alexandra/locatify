@@ -1,0 +1,24 @@
+version: '3.9'
+services:
+  api:
+    build: 
+      context: ./
+      dockerfile: ./api/Dockerfile
+    command: python -m flask --app app run --debug -h 0.0.0.0 -p 34343
+    ports:
+      - "34343:34343"
+    volumes:
+      - ./api:/api
+
+  app:
+    build: ./app
+    command: nodemon --exec npm start
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    volumes:
+      - ./app:/app
+      - /app/node_modules
+    environment:
+      - REACT_APP_API_URL=http://localhost:34343

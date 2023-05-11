@@ -22,8 +22,6 @@ docker-compose up
 
 This will build the Docker image, and run in a standalone way. This docker image is configured for development, and will run in a way that allows for hot reloading of the API and App code, so any changes made to the code will be reflected in the running container. This is useful for development, but not recommended for production.
 
-Additionally, the project is configured in a way such that it will ignore all values in the `.env` file aside from those that are required for the project to run (see the [.env](#.env) section above). This is done to prevent any misconfigurations from causing the project to fail to run. This allows for the project to be run in a clean state without any additional configuration.
-
 ## Without Docker
 If you do not wish to use Docker, then you can run the project without it. This can be done by separately running the API and App. Further, you will need to manually install the dependencies for each project. This can be done by running the following commands
 - From the app directory:
@@ -45,7 +43,7 @@ If you do not wish to use Docker, then you can run the project without it. This 
 Once the dependencies are installed, you can run the API and App separately. This can be done by running the following commands from the root of the project:
 - From the api directory:
   ```bash
-  python -m flask --app app run
+  python -m flask --app app run -p 34343
   ```
   > Note, you may wish to use the `--debug` flag at the end of this command if you want to enable hot reloading. This is useful for development, but not recommended for production.
 - To run the App:
@@ -68,7 +66,6 @@ MMDB_PATH=/path/to/GeoLite2-City.mmdb
 ```
 
 Once the API has access to a `.mmdb` file, it will be accessible at [localhost:34343](http://localhost:34343/). This can be verified by hitting the [health check endpoint](http://localhost:34343/health-check/)
-> Note, If you configured a port in the `.env` file with `API_PORT`, then it will use that port instead.
 
 ### Endpoints
 #### GET `/health-check`
