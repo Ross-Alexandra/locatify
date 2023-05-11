@@ -5,7 +5,6 @@ const Wrapper = styled.input`
     appearance: none;
     outline: transparent;
 
-    width: 200px;
     padding: 5px 15px;
     border-radius: var(--border-radius-small);
 

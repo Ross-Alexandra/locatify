@@ -1,7 +1,9 @@
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import React from 'react';
+import { Link, LinkProps } from 'react-router-dom';
 
-const Wrapper = styled.button`
+const WrapperCss = css`
     appearance: none;
     outline: transparent;
 
@@ -12,7 +14,7 @@ const Wrapper = styled.button`
 
     padding: 5px 10px;
     border-radius: var(--border-radius);
-    
+
     background-color: var(--primary-color);
     color: var(--background-color);
     border: 1px solid var(--border-color);
@@ -43,15 +45,51 @@ const Wrapper = styled.button`
     }
 `;
 
-type ButtonProps = Omit<React.HTMLProps<HTMLButtonElement>, 'as' | 'type'>
+const ButtonWrapper = styled.button`
+    ${WrapperCss}
+`;
+
+const AnchorWrapper = styled.a`
+    ${WrapperCss}
+
+    text-decoration: none;
+`;
+
+const LinkWrapper = styled(Link)`
+    ${WrapperCss}
+
+    text-decoration: none;
+`;
+
+type ButtonElementProps = Omit<React.HTMLProps<HTMLButtonElement>, 'as' | 'type'>;
+type AnchorElementProps = Omit<React.HTMLProps<HTMLAnchorElement>, 'as'>;
+type ButtonProps = (ButtonElementProps | AnchorElementProps | LinkProps) & {
+    as?: 'button' | 'a' | 'link';
+}
 
 export const Button: React.FC<ButtonProps> = ({
     children,
+    as='button',
     ...props
 }) => {
-    return (
-        <Wrapper {...props}>
-            {children}
-        </Wrapper>
-    );
+    switch (as) {
+        case 'button':
+            return (
+                <ButtonWrapper {...(props as ButtonElementProps)}>
+                    {children}
+                </ButtonWrapper>
+            );
+        case 'a':
+            return (
+                <AnchorWrapper {...(props as AnchorElementProps)}>
+                    {children}
+                </AnchorWrapper>
+            );
+        case 'link':
+            return (
+                <LinkWrapper {...(props as LinkProps)}>
+                    {children}
+                </LinkWrapper>
+            );
+    }
 };

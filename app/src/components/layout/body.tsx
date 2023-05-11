@@ -1,6 +1,8 @@
 import styled from '@emotion/styled';
 import React from 'react';
 
+import { theme } from '../../theme';
+
 const Wrapper = styled.div`
     position: relative;
     overflow: hidden;
@@ -9,37 +11,55 @@ const Wrapper = styled.div`
     flex-direction: column;
 
     padding: 15px;
-    height: calc(100vh - var(--footer-height));
-    height: calc(100svh - var(--footer-height));
 
     .content {
         display: flex;
         flex-direction: column;
 
-        height: 100%;
         width: 100%;
 
         max-width: 1920px;
         margin-inline: auto;
     }
 
-    header > a {
-        display: block;
-        width: 275px;
-        aspect-ratio: 3 / 1;
-
-        background-image: url('/locatify.png');
-        background-size: contain;
-        background-position: center;
-        background-repeat: no-repeat;
-    }
-
-    .inner-content {
-        flex-grow: 1;
-    }
-
-    ::before {
+    header {
         position: absolute;
+        top: 15px;
+        left: 15px;
+        z-index: -1;
+
+        a {
+            display: block;
+            width: 275px;
+            aspect-ratio: 3 / 1;
+
+            background-image: url('/locatify.png');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            @media (max-width: ${theme.breakpoints.mobile}) {
+                width: 80vw;
+                max-height: 80px;
+            }
+        }
+
+        @media (max-width: ${theme.breakpoints.mobile}) {
+            position: relative;
+            top: auto;
+            left: auto;
+
+            align-self: center;
+        }
+    }
+
+    /*
+        This is the image that will be blurred
+        in the background. So we need to make
+        sure that this is a pseudo element.
+    */
+    ::before {
+        position: fixed;
 
         /*
             Don't use 0px values for the inset as this

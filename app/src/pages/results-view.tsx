@@ -5,9 +5,9 @@ const Wrapper = styled.div`
 
 `;
 
-type LocationsViewProps = Omit<React.HTMLProps<HTMLDivElement>, 'as'>
+type ResultsViewProps = Omit<React.HTMLProps<HTMLDivElement>, 'as'>
 
-export const LocationsView: React.FC<LocationsViewProps> = ({
+export const ResultsView: React.FC<ResultsViewProps> = ({
     ...props
 }) => {
     return (
