@@ -8,6 +8,9 @@ import { IpError } from '../../types';
 const Wrapper = styled.div`
     ${theme.card}
 
+    height: 400px;
+    width: 100%;
+
     display: flex;
     flex-direction: column;
     align-items: center;
