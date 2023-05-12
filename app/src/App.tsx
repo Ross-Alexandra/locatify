@@ -166,7 +166,7 @@ export function App() {
                         <LookupView onLookup={onLookup}/>
                     } />
 
-                    <Route path='/results/*' element={
+                    <Route path='/results' element={
                         <ResultsView 
                             ipData={ipData}
                             ipDataState={ipDataState}
