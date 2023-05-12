@@ -59,10 +59,6 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
             {ipData.map((ip, cardIndex) => 
                 <IpCard key={cardIndex} ipData={ip} />
             )}
-
-            {ipDataState === 'error' && (
-                <div>Error</div>
-            )}
         </Wrapper>
     );
 };
