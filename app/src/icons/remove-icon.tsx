@@ -5,6 +5,7 @@ import type { IconProps } from '.';
 export const RemoveIcon: React.FC<IconProps> = ({
     color,
     size,
+    title,
     ...props
 }) => {
     return (
@@ -25,6 +26,7 @@ export const RemoveIcon: React.FC<IconProps> = ({
                 fillRule="nonzero"
                 fill={color}
             />
+            {title && <title>{title}</title>}
         </svg>
     );
 };

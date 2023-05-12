@@ -88,22 +88,38 @@ export const LocationCard: React.FC<LocationCardProps> = ({
                 )}
                 
                 <div className='location'>
-                    <LocationIcon color={theme.colors.text} size={24} />
+                    <LocationIcon 
+                        title='Location'
+                        color={theme.colors.text}
+                        size={24}
+                    />
                     <h3>{ipData.city ?? 'City not found'}, {ipData.country_code ?? 'Country not found'}</h3>
                 </div>
                 
                 <div className='postal-code'>
-                    <PostalCodeIcon color={theme.colors.text} size={24} />
+                    <PostalCodeIcon
+                        title='Postal code'
+                        color={theme.colors.text}
+                        size={24}
+                    />
                     <p>{ipData.postal_code ?? 'Postal code not found'}</p>
                 </div>
 
                 <div className='accuracy'>
-                    <AccuracyIcon color={theme.colors.text} size={24} />
+                    <AccuracyIcon
+                        title='Location accuracy'
+                        color={theme.colors.text}
+                        size={24}
+                    />
                     <p>{ipData.accuracy_radius ?? 'unknown'} km</p>
                 </div>
 
                 <div className='time'>
-                    <ClockIcon color={theme.colors.text} size={24} />
+                    <ClockIcon
+                        title='Local time'
+                        color={theme.colors.text}
+                        size={24}
+                    />
                     <p>{getCurrentTimeInZone(ipData.time_zone)}</p>
                 </div>
             </div>

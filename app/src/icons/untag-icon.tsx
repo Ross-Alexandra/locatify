@@ -5,6 +5,7 @@ import { IconProps } from '.';
 export const UntagIcon = React.forwardRef<SVGSVGElement, IconProps>(({
     size,
     color,
+    title,
     ...props
 }, ref) => {
     return (
@@ -32,6 +33,7 @@ export const UntagIcon = React.forwardRef<SVGSVGElement, IconProps>(({
                 x2={0}
                 y2={24}
             />
+            {title && <title>{title}</title>}
         </svg>
     );
 });

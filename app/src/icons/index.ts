@@ -1,6 +1,7 @@
 export interface IconProps extends Omit<React.SVGProps<SVGSVGElement>, 'as'> {
     color?: string;
     size?: number | string;
+    title?: string;
 }
 
 export * from './accuracy-icon';
