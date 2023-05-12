@@ -11,6 +11,7 @@ import {
 
 import { Body, Footer } from './components/layout';
 import { LookupView, ResultsView } from './pages';
+import { ErrorView } from './pages/error-view';
 import { api } from './services';
 import { theme } from './theme';
 import {
@@ -86,6 +87,22 @@ const rootCSS = css`
     }
 `;
 
+function getDataFromAxiosError(error: AxiosError): (IpNotFound | IpError)[] {
+    if (error.response?.status === 404) {
+        return [{
+            ...error.response?.data ?? {} as Pick<IpNotFound, 'ip_address' | 'error'>,
+            status: 404,
+        }] as IpNotFound[];
+    } else if (error.response?.status === 400) {
+        return [{
+            ...error.response?.data ?? {} as Pick<IpError, 'ip_address' | 'error'>,
+            status: 400,
+        }] as IpError[];
+    } else {
+        return [];
+    }
+}
+
 export function App() {
     const navigate = useNavigate();
     const [ipData, setIpData] = React.useState<IpData[]>([]);
@@ -109,31 +126,32 @@ export function App() {
                 setIpData([ipData]);
             } catch (error) {
                 const axiosErrorAssertion = error as AxiosError;
-                if (axiosErrorAssertion?.response?.status === 404) {
-                    setIpData([{
-                        ...axiosErrorAssertion.response.data as Pick<IpNotFound, 'ip_address' | 'error'>,
-                        status: 404,
-                    }]);
-                } else if (axiosErrorAssertion?.response?.status === 400) {
-                    setIpData([{
-                        ...axiosErrorAssertion.response.data as Pick<IpError, 'ip_address' | 'error'>,
-                        status: 400,
-                    }]);
-                } else {
+                const errorData = getDataFromAxiosError(axiosErrorAssertion);
+                if (errorData.length === 0) {
                     setIpDataState('error');
+                    navigate('/error');
+                    return;
                 }
+            
+                setIpData(errorData);
             }
         } else {
-            const { data: ipData } = await api.post<IpData[]>('/ips/', {
-                ip_addresses: ipSet.map(({ ip }) => ip),
-            });
-
-            ipData.map((ipData, index) => {
-                if (ipSet[index].tag) {
-                    ipData.tag = ipSet[index].tag;
-                }
-            });
-            setIpData(ipData);
+            try {
+                const { data: ipData } = await api.post<IpData[]>('/ips/', {
+                    ip_addresses: ipSet.map(({ ip }) => ip),
+                });
+    
+                ipData.map((ipData, index) => {
+                    if (ipSet[index].tag) {
+                        ipData.tag = ipSet[index].tag;
+                    }
+                });
+                setIpData(ipData);
+            } catch {
+                setIpDataState('error');
+                navigate('/error');
+                return;
+            }
         }
 
         setIpDataState('success');
@@ -153,6 +171,10 @@ export function App() {
                             ipData={ipData}
                             ipDataState={ipDataState}
                         />
+                    } />
+
+                    <Route path='/error' element={
+                        <ErrorView ipDataState={ipDataState} />
                     } />
 
                     <Route path='*' element={
