@@ -10,6 +10,7 @@ import { theme } from '../../theme';
 import { IpAddress } from '../../types';
 import { Button } from '../ui';
 import { Input } from '../ui/input';
+import { Spinner } from '../ui/spinner';
 
 const Wrapper = styled.div`
     .upload {
@@ -85,6 +86,8 @@ export const BulkLookup: React.FC<BulkLookupProps> = ({
     onLookup,
     ...props
 }) => {
+    const [parsing, setParsing] = React.useState(false);
+
     const [ips, setIps] = React.useState<IpAddress[]>([]);
     const onFileChange = React.useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         const reader = new FileReader();
@@ -109,13 +112,15 @@ export const BulkLookup: React.FC<BulkLookupProps> = ({
             );
 
             setIps(safeRecords);
+            setParsing(false);
         };
 
         const file = event.target.files?.[0];
         if (file) {
+            setParsing(true);
             reader.readAsText(file);
         }
-    }, [setIps]);
+    }, [setIps, setParsing]);
 
     const filledIps = React.useMemo(() => {
         return ips.filter(({ ip }) => ip !== '');
@@ -138,18 +143,22 @@ export const BulkLookup: React.FC<BulkLookupProps> = ({
             </div>
 
             <div className='upload'>
-                <div className='file-uploader'>
-                    <h3>
-                        Drag &amp; Drop
-                    </h3>
-                    <FileUploadIcon size={35} color="var(--text-color)" />
+                { parsing ? (
+                    <Spinner />
+                ) : (
+                    <div className='file-uploader'>
+                        <h3>
+                            Drag &amp; Drop
+                        </h3>
+                        <FileUploadIcon size={35} color="var(--text-color)" />
 
-                    <Input 
-                        type="file"
-                        accept=".csv"
-                        onChange={onFileChange}
-                    />
-                </div>
+                        <Input 
+                            type="file"
+                            accept=".csv"
+                            onChange={onFileChange}
+                        />
+                    </div>
+                )}
 
                 <a
                     href="/example.csv"
