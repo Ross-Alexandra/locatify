@@ -19,6 +19,7 @@ const Wrapper = styled.div`
     gap: 10px;
 
     height: auto;
+    max-width: 100%;
     width: max-content;
 
     .title {
@@ -44,6 +45,13 @@ const Wrapper = styled.div`
         display: flex;
         flex-direction: row;
         gap: 10px;
+
+        button,
+        a {
+            @media (max-width: ${theme.breakpoints.ultraSmall}) {
+                font-size: 0.8rem;
+            }
+        }
     }
 `;
 

@@ -18,8 +18,19 @@ const Wrapper = styled.div`
 
     place-items: center;
 
+    @media (max-width: ${theme.breakpoints.laptop}) {
+        width: 100%;
+    }
+
+    @media (max-width: ${theme.breakpoints.tablet}) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
     @media (max-width: ${theme.breakpoints.mobile}) {
-        margin-top: 0px;
+        display: flex;
+        flex-direction: column;
+
+        margin: 0px;
     }
 `;
 

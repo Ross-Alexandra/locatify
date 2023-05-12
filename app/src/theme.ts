@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 
 export const theme = {
     breakpoints: {
+        ultraSmall: '350px',
         mobile: '600px',
         tablet: '960px',
         laptop: '1280px',
