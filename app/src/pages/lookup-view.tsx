@@ -4,6 +4,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { BulkLookup, ManualLookup } from '../components/lookup';
 import { theme } from '../theme';
+import { IpAddress } from '../types';
 
 const Wrapper = styled.div`
     display: grid;
@@ -56,15 +57,14 @@ const Wrapper = styled.div`
     }
 `;
 
-type LookupViewProps = Omit<React.HTMLProps<HTMLDivElement>, 'as'>
+type LookupViewProps = Omit<React.HTMLProps<HTMLDivElement>, 'as'> & {
+    onLookup: (ipsToLookup: IpAddress[]) => Promise<void>;
+}
 
 export const LookupView: React.FC<LookupViewProps> = ({
+    onLookup,
     ...props
 }) => {
-    const onLookup = React.useCallback(() => {
-        console.log('lookup');
-    }, []);
-
     return (
         <Wrapper {...props}>
             <div className='lookup-view'>

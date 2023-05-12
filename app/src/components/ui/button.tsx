@@ -43,6 +43,10 @@ const WrapperCss = css`
         filter: grayscale(1);
         cursor: not-allowed;
     }
+
+    &:focus-visible {
+        outline: 3px solid var(--focus-outline);
+    }
 `;
 
 const ButtonWrapper = styled.button`

@@ -47,7 +47,7 @@ const Wrapper = styled.div`
     }
 `;
 
-type LookupInputProps = Omit<React.HTMLProps<HTMLInputElement>, 'as'> & {
+type LookupInputProps = Omit<React.HTMLProps<HTMLInputElement>, 'as' | 'ref'> & {
     onRemove: () => void;
 
     tag: string | undefined;
@@ -63,6 +63,8 @@ export const LookupInput: React.FC<LookupInputProps> = ({
     ...props
 }) => {
     const [tagEnabled, setTagEnabled] = React.useState(false);
+    const tagInputRef = React.useRef<HTMLInputElement>(null);
+
     const toggleTag = React.useCallback(() => {
         if (tagEnabled) {
             onRemoveTag();
@@ -71,8 +73,13 @@ export const LookupInput: React.FC<LookupInputProps> = ({
         setTagEnabled(previous => !previous);
     }, [tagEnabled, setTagEnabled]);
 
-    const TagComponent = tagEnabled ? UntagIcon : TagIcon;
-    
+    React.useEffect(() => {
+        if (tagEnabled) {
+            tagInputRef.current?.focus();
+        }
+    }, [tagEnabled]);
+
+    const TagComponent = tagEnabled ? UntagIcon : TagIcon;    
     return (
         <Wrapper>
             <Input 
@@ -83,10 +90,10 @@ export const LookupInput: React.FC<LookupInputProps> = ({
 
             {tagEnabled && (
                 <Input
+                    ref={tagInputRef}
                     className='tag-input'
                     placeholder='Tag'
-                    value={tag
-                    }
+                    value={tag}
                     onChange={event => onTagChange((event.target as HTMLInputElement).value)}
                 />
             )}
@@ -95,7 +102,13 @@ export const LookupInput: React.FC<LookupInputProps> = ({
                 className='tag-icon'
                 color='var(--text-color)'
                 size={24}
+                tabIndex={0}
                 onClick={toggleTag}
+                onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                        toggleTag();
+                    }
+                }}
             />
 
             <RemoveIcon

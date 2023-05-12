@@ -23,10 +23,7 @@ const Wrapper = styled.input`
 
 type InputProps = Omit<React.HTMLProps<HTMLInputElement>, 'as'>
 
-export const Input: React.FC<InputProps> = ({
-    ...props
-}) => {
-    return (
-        <Wrapper {...props} />
-    );
-};
+export const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => (
+    <Wrapper ref={ref} {...props} />
+));
+Input.displayName = 'Input';

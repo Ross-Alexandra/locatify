@@ -2,16 +2,18 @@ import React from 'react';
 
 import { IconProps } from '.';
 
-export const UntagIcon: React.FC<IconProps> = ({
+export const UntagIcon = React.forwardRef<SVGSVGElement, IconProps>(({
     size,
     color,
     ...props
-}) => {
+}, ref) => {
     return (
         <svg
             width={size}
             height={size}
             {...props}
+
+            ref={ref}
             viewBox='0 0 24 24'
             xmlns="http://www.w3.org/2000/svg"
             fillRule="evenodd"
@@ -32,4 +34,5 @@ export const UntagIcon: React.FC<IconProps> = ({
             />
         </svg>
     );
-};
+});
+UntagIcon.displayName = 'UntagIcon';

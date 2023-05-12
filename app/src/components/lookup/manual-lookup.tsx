@@ -5,12 +5,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { BulkIcon, NewItemIcon, SearchIcon } from '../../icons';
 import { ipRegex } from '../../services/ip';
 import { theme } from '../../theme';
+import { IpAddress } from '../../types';
 import { Button } from '../ui';
 import { Input } from '../ui/input';
 
 import { LookupInput } from './lookup-input';
-
-import { IpAddress } from '.';
 
 const Wrapper = styled.div`
     .existing-ips {
@@ -43,7 +42,7 @@ const Wrapper = styled.div`
 `;
 
 interface ManualLookupProps {
-    onLookup: (ips: IpAddress[]) => void;
+    onLookup: (ips: IpAddress[]) => Promise<void>;
 }
 
 export const ManualLookup: React.FC<ManualLookupProps> = ({

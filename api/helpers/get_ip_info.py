@@ -19,10 +19,12 @@ def get_ip_info(reader, ip_address):
     except AddressNotFoundError as e:
         return {
             "status": 404,
+            "ip_address": ip_address,
             "error": f"Could not find IP address {ip_address} in database"
         }
     except Exception as e:
         return {
             "status": 400,
+            "ip_address": ip_address,
             "error": f"Unexpected error while looking up IP address: {e}"
         }

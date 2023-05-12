@@ -7,10 +7,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { ManualIcon, SearchIcon } from '../../icons';
 import { FileUploadIcon } from '../../icons/file-upload-icon';
 import { theme } from '../../theme';
+import { IpAddress } from '../../types';
 import { Button } from '../ui';
 import { Input } from '../ui/input';
-
-import { IpAddress } from '.';
 
 const Wrapper = styled.div`
     .upload {
@@ -79,7 +78,7 @@ const Wrapper = styled.div`
 `;
 
 type BulkLookupProps = Omit<React.HTMLProps<HTMLDivElement>, 'as'> & {
-    onLookup: (ips: IpAddress[]) => void;
+    onLookup: (ips: IpAddress[]) => Promise<void>;
 }
 
 export const BulkLookup: React.FC<BulkLookupProps> = ({
@@ -203,7 +202,7 @@ export const BulkLookup: React.FC<BulkLookupProps> = ({
                 <Button
                     disabled={filledIps.length === 0}
                     title={filledIps.length === 0 ? 'Upload a file with IPs to process' : undefined}
-                    onClick={() => onLookup([])}
+                    onClick={() => onLookup(filledIps)}
                 >
                     <SearchIcon color="var(--background-color)" size={24} />
                     Search
