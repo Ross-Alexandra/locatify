@@ -19,6 +19,7 @@ const Wrapper = styled.div`
     grid-template-rows: repeat(2, minmax(0, 1fr));
     gap: 10px;
 
+
     iframe {
         width: 100%;
         height: 100%;
@@ -77,10 +78,14 @@ export const LocationCard: React.FC<LocationCardProps> = ({
     return (
         <Wrapper {...props}>
             <div className='google-embed'>
-                <iframe
-                    title='Google Maps'
-                    src={getMapUrl(ipData.latitude, ipData.longitude)}
-                />
+                {ipData.latitude && ipData.longitude ? (
+                    <iframe
+                        title='Google Maps'
+                        src={getMapUrl(ipData.latitude, ipData.longitude)}
+                    />
+                ) : (
+                    <h2>Location not found</h2>
+                )}
             </div>
 
             <div className='location-info'>

@@ -26,7 +26,7 @@ const Wrapper = styled.div`
         position: absolute;
         top: 15px;
         left: 15px;
-        z-index: -1;
+        z-index: 1;
 
         a {
             display: block;

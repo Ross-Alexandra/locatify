@@ -37,5 +37,7 @@ export const theme = {
         padding: 15px;
         border: 1px solid var(--border-color);
         backdrop-filter: saturate(180%) blur(20px);
+
+        z-index: 10;
     `,
 };

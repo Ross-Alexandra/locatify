@@ -15,10 +15,9 @@ const Wrapper = styled.div`
     min-height: calc(100svh - var(--footer-height) - 30px);
 
     .lookup-view {
-        overflow: hidden;
-        border-radius: var(--border-radius);
-        background-color: var(--background-color);
+        ${theme.card}
 
+        overflow: hidden;
         height: max-content;
 
         .title {

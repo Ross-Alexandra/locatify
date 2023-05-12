@@ -1,5 +1,6 @@
 import { Global, css } from '@emotion/react';
 import { AxiosError } from 'axios';
+import _ from 'lodash';
 import React from 'react';
 import {
     Navigate,
@@ -91,23 +92,24 @@ export function App() {
     const [ipDataState, setIpDataState] = React.useState<'prefetch' | 'loading' | 'success' | 'error'>('prefetch');
 
     const onLookup = React.useCallback(async (ipsToLookup: IpAddress[]) => {
-        if (ipsToLookup.length === 0) {
+        const ipSet = _.uniqBy(ipsToLookup, 'ip');
+
+        if (ipSet.length === 0) {
             return;
         }
 
         setIpDataState('loading');
         navigate('/results');
 
-        if (ipsToLookup.length === 1) {
+        if (ipSet.length === 1) {
             try {
-                const { data: ipData } = await api.get<IpData>(`/ip/${ipsToLookup[0].ip}`);
+                const { data: ipData } = await api.get<IpData>(`/ip/${ipSet[0].ip}`);
 
-                ipData.tag = ipsToLookup[0].tag;
+                ipData.tag = ipSet[0].tag;
                 setIpData([ipData]);
             } catch (error) {
                 const axiosErrorAssertion = error as AxiosError;
                 if (axiosErrorAssertion?.response?.status === 404) {
-                    console.log(axiosErrorAssertion.response.data);
                     setIpData([{
                         ...axiosErrorAssertion.response.data as Pick<IpNotFound, 'ip_address' | 'error'>,
                         status: 404,
@@ -123,12 +125,12 @@ export function App() {
             }
         } else {
             const { data: ipData } = await api.post<IpData[]>('/ips/', {
-                ip_addresses: ipsToLookup.map(({ ip }) => ip),
+                ip_addresses: ipSet.map(({ ip }) => ip),
             });
 
             ipData.map((ipData, index) => {
-                if (ipsToLookup[index].tag) {
-                    ipData.tag = ipsToLookup[index].tag;
+                if (ipSet[index].tag) {
+                    ipData.tag = ipSet[index].tag;
                 }
             });
             setIpData(ipData);
