@@ -27,6 +27,7 @@ This will build the Docker image, and run in a standalone way. This docker image
 This app uses a Python backend with a React frontend. In order to run this project, you will need to have the following installed:
 - Python 3.6+
 - Node 12+
+> Note, this project was developed using Python 3.10.6, and Node 18.16.0 It is recommended to use these versions, but it is likely that any version of Python 3.6+ and Node 12+ will work.
 
 To install these dependencies, please follow the instructions for your operating system:
 ### Windows
@@ -61,17 +62,17 @@ In order to run the app, you will need to install the dependencies for both the 
   ```bash
   npm install
   ```
-- from the api directory (without a venv):
+- from the api directory (without a venv, not recommended if you are using Python for other projects):
   ```bash
   pip install -r requirements.txt
   ```
-- from the api directory (with a venv):
+- from the api directory (with a venv, recommended for development as it will not interfere with other Python projects):
   ```bash
     python -m venv venv
     source venv/bin/activate
     pip install -r requirements.txt
     ```
-> Note, this project was developed using Python 3.10.6, and Node 18.16.0 It is recommended to use these versions, but it is likely that any version of Python 3.6+ and Node 12+ will work.
+> Note, if you are using Windows, you will need to use `venv\Scripts\activate` instead of `source venv/bin/activate`.
 
 ## Running the app
 Once the dependencies are installed, you can run the API and App separately. This can be done by running the following commands from the following directories:
