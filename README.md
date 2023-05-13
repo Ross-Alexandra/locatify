@@ -207,6 +207,7 @@ Once the `.mmdb` file is accessible, a RESTful server will be created which will
     "longitude": "float <longitude>"
   }
   ```
+
 - If `<ip_address>` is invalid, then a `400` response is returned with the following JSON:
   ```json
   {
@@ -214,6 +215,7 @@ Once the `.mmdb` file is accessible, a RESTful server will be created which will
     "error": "string <error_message>"
   }
   ```
+
 - If `<ip_address>` is valid, but does not exist within the `.mmdb` file, then a `404` response is returned with the following JSON:
   ```json
   {
@@ -224,7 +226,7 @@ Once the `.mmdb` file is accessible, a RESTful server will be created which will
 
 ### POST `/ips`
 Body
-```
+```json
 {
   "ip_addresses": [
     "string <ip_address>",
@@ -232,8 +234,9 @@ Body
   ]
 }
 ```
+
 - The response from this endpoint is the same as if a list of `GET /ip/<ip_address>` requests were made. IE, The response will be shaped like the following body (depending on the result of each lookup):
-```
+```json
 {
     "ip_addresses": [
         {
@@ -261,24 +264,28 @@ Body
     ]
 }
 ```
-- This endpoint should always be used when fetching multiple ip's, as it uses `multiprocessing` under the hood to simultaneously query the `.mmdb` file. This allows for a significant speedup when querying multiple ip's.
-- This endpoint is made using a POST request as it is possible that the list of ip's could be too large to fit in a GET request. This is unlikely, but possible. This is also why the list of ip's is sent in the body of the request, rather than as a query parameter. In the future, it may be worth considering responding with a `303`, and providing a link to a file containing the results of the request. This would allow for the request to be made using a GET request, and would allow for the results to be cached. This however would require an additional database to be setup, and is likely outside the scope of this assignment.
+- This endpoint should always be used when fetching multiple ip's, as it will batch your request over multiple CPU cores.
+
+- This endpoint is made using a POST request as it is possible that the list of ip's could be too large to fit in a GET request. In the future, it may be worth considering responding with a `303`, and providing a link to a fetch a . This would allow for the request to be made using a GET request, and would allow for the results to be cached. This however would require an additional database to be setup, and is likely outside the scope of this assignment.
 
 # Deployment Considerations
 Though this implementation attempts to create a production-ready version of this assignment,
 it is not being deployed. In order to make this project deployment-ready, a few concerns must
 be solved:
  - The current setup using a `.mmdb` file from the local file system is likely not suitable for a deployment as auto-updating is not taken into account which is vital for long term accuracy.
-    - This could be mitigated by moving to a GeoLite2 web service (prohibited by the assignment), or
+    - This could be mitigated by moving to a GeoLite2 web service (prohibited by the assignment).
     - This could be mitigated by creating a separate db service, and use automatic re-downloading and conversion of MaxMind's offered `.csv` format, and using a more standard SQL database setup (likely outside the scope of this assignment as it specifies using the DB Readers, which use `.mmdb` files).
+    - This could also be mitigated by using a cloud file storage service (such as S3), and creating a cron job to download the `.mmdb` file from MaxMind, and upload it to the cloud file storage service on a regular basis. This would allow for the file to be accessed by multiple instances of the API, and would allow for the file to be updated automatically, however it would require the API to download this file for each request. This would likely be slower than the other solutions, and would likely be more expensive due to the cost of accessing the cloud-stored file on each request.
+
 - The current setup provides no specialized docker configuration for production, and additionally does not provide any opinion on how it should be hosted.
-    - This could be solved by creating a production docker image, and providing a docker-compose file. 
-    - Alternatively, this could be solved with additional configuration as part of a larger CI/CD pipeline, and deployed to a cloud provider such as AWS, Azure, or GCP. This would likely be the preferred solution for a production deployment.
-- The frontend app is not configured in any opinionated way. Thus, work would need to be done in order to configure it for a production deployment.
-    - This could be solved by creating a small express server (or by converting this to a Next.JS project) to serve the static files, and provide a docker-compose file.
-    - Alternatively, this could be solved with additional configuration as part of a larger CI/CD pipeline, and deployed to a cloud provider such as AWS, Azure, or GCP. This would likely be the preferred solution for a production deployment.
+    - For automatic deployment, a CI/CD server would need to be setup. From here, after creating production-ready Dockerfiles, the CI/CD server could be configured to automatically build and deploy the docker images to a docker host such as Kubernetes, or ECS. Alternatively, the CI/CD server could be configured to deploy each portion of the application separately using different services (such as static hosting for the frontend, and a serverless function for the backend API).
+    - Alternatively, some configuration could be created to allow for each service to be manually deployed to a host (such as with Firebase hosting, or AWS Elastic Beanstalk), however this would not likely be as scalable of a solution, and would require more manual work.
+
 - The backend API currently has basic CORS configuration allowing all routes, this is not suitable for a production environment.
-    - This could be solved by configuring CORS to only allow the frontend app to access the API in a production environment.
+    - This would be solved depending on the deployment solution, but would likely be solved with environment variables, or a configuration file to allow for the CORS configuration to be changed without needing the code to be environment-aware.
 
 ## Future Improvements
-- This README is being created at the outset of the project as an outline. As such, no future improvements are currently known, as no implementation exists.
+
+- Once this assignment has been reviewed and I have been given permission to release it publicly, the backend should likely be refactored to use a more scalable solution for looking up IP addresses. For more information about this, see the [Deployment Considerations](#deployment-considerations) section. Likely the next steps would be to create a separate database service, and use automatic re-downloading and conversion of MaxMind's offered `.csv` format, and using a more standard SQL database setup.
+
+- The maps displayed after a user looks up an IP address currently don't show any information about the accuracy of the provided pin. This was entirely out of scope on this project, however I would be interested in adding a circle around the pin to show the accuracy radius of the provided IP address. This would require using the maps API to draw a circle around the pin, which in turn would require additional permissions on the API key (additional permissions which would have likely caused that key to become un-sharable). Because of this, I have not added this feature as it would require that a Google Maps API key be provided in the `.env` file, which in turn would require the reviewer to create their own Google Maps API key.
