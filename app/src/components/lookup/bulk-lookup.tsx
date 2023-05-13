@@ -29,7 +29,7 @@ const Wrapper = styled.div`
 
         border: 1px dashed var(--border-color);
         border-radius: var(--border-radius-small);
-        padding: 15px;
+        padding: 15px;      
     }
 
     input[type="file"] {
@@ -43,6 +43,8 @@ const Wrapper = styled.div`
         z-index: 1;
 
         cursor: pointer;
+
+        outline: 3px solid var(--primary-color);
     }
 
     .ips {
@@ -146,13 +148,26 @@ export const BulkLookup: React.FC<BulkLookupProps> = ({
                 { parsing ? (
                     <Spinner />
                 ) : (
-                    <div className='file-uploader'>
+                    <div 
+                        className='file-uploader'
+                        tabIndex={0}
+                        onKeyDown={e => {
+                            if (e.key === 'Enter') {
+                                const input: HTMLInputElement | null = e.currentTarget.querySelector('input[type="file"]');
+
+                                if (input) {
+                                    input.click();
+                                }
+                            }
+                        }}
+                    >
                         <h3>
                             Drag &amp; Drop
                         </h3>
                         <FileUploadIcon size={35} color="var(--text-color)" />
 
-                        <Input 
+                        <Input
+                            tabIndex={-1}
                             type="file"
                             accept=".csv"
                             onChange={onFileChange}

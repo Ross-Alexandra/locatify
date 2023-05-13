@@ -2,30 +2,61 @@
 An implementation of the assignment created by the company MaxMind used during their interview process for their Senior Web Developer/Software Engineer position.
 
 # Getting Started
-## .env
-**Before following any instructions below**, you must enter the following information into the [.env](./.env) file. This project cannot run without this critical information.
-```
-LICENSE_KEY=<YOUR_LICENSE_KEY>
-```
+## Environment Setup
+**Before following any instructions below**
+You will need to create a `.env` file. This can be accomplished by copying the `template.env` file, and renaming it to `.env`. 
 
-example:
-```
-LICENSE_KEY=123abc_this_is_my_license_key
-```
+In order to start the app, you will need to either provide a `LICENSE_KEY` (which is a MaxMind license key), or you will need to provide an `MMDB_PATH` (a path to the `.mmdb` database file). Having both is not required.
+
+> Note, if you plan to use docker you will need to provide the `LICENSE_KEY` in the `.env` file. This is because the docker image is built using the `LICENSE_KEY` environment variable. If you do not provide this, then the docker image will not be able to download the `.mmdb` file, and will fail to start. For more information on why this is setup this way, see the [Deployment Considerations](#deployment-considerations) section.
 
 ## Using Docker
-__WARNING:__ Due to Docker having its own filesystem, using the `MMDB_PATH` environment variable is unsupported when working with docker.
-
 The easiest way to run this project is to use Docker. This project is configured to run using Docker Compose, so all you need to do is run the following command from the root of the project:
+
 ```bash
 docker-compose up
 ```
-> If you don't have Docker or Docker Compose installed, please follow the instructions [here](https://docs.docker.com/get-docker/). Using Docker Desktop is the easiest way to get started if you have no experience with Docker, so it is recommended.
+>__WARNING:__ Due to Docker having its own filesystem, using the `MMDB_PATH` environment variable is unsupported when working with docker.
 
-This will build the Docker image, and run in a standalone way. This docker image is configured for development, and will run in a way that allows for hot reloading of the API and App code, so any changes made to the code will be reflected in the running container. This is useful for development, but not recommended for production.
+> Note, If you don't have Docker or Docker Compose installed, please follow the instructions [here](https://docs.docker.com/get-docker/). Using Docker Desktop is the easiest way to get started if you have no experience with Docker.
 
-## Without Docker
-If you do not wish to use Docker, then you can run the project without it. This can be done by separately running the API and App. Further, you will need to manually install the dependencies for each project. This can be done by running the following commands
+This will build the Docker image, and run in a standalone way. This docker image is configured for development, and will run in a way that allows for hot reloading of the API and App code, so any changes made to the code will be reflected in the running container. This is useful for development, but not recommended for production. For a breakdown of what is needed to get this project deployment-ready, see the [Deployment Considerations](#deployment-considerations) section.
+
+## Using Python & Node
+### Installing the prerequisites
+This app uses a Python backend with a React frontend. In order to run this project, you will need to have the following installed:
+- Python 3.6+
+- Node 12+
+
+To install these dependencies, please follow the instructions for your operating system:
+### Windows
+- Python: [Download](https://www.python.org/downloads/windows/)
+- Node: [Download](https://nodejs.org/en/download/) (this will install both Node and NPM)
+
+### Linux
+Python:
+```bash
+sudo apt install python3 python3-pip
+```
+
+Node:
+```bash
+sudo apt install nodejs npm
+```
+
+### Mac
+Python:
+```bash
+brew install python3
+```
+
+Node:
+```bash
+brew install node
+```
+
+## Installing the dependencies
+In order to run the app, you will need to install the dependencies for both the API and the App. This can be done by running the following commands from the following directories: 
 - From the app directory:
   ```bash
   npm install
@@ -42,7 +73,8 @@ If you do not wish to use Docker, then you can run the project without it. This 
     ```
 > Note, this project was developed using Python 3.10.6, and Node 18.16.0 It is recommended to use these versions, but it is likely that any version of Python 3.6+ and Node 12+ will work.
 
-Once the dependencies are installed, you can run the API and App separately. This can be done by running the following commands from the root of the project:
+## Running the app
+Once the dependencies are installed, you can run the API and App separately. This can be done by running the following commands from the following directories:
 - From the api directory:
   ```bash
   python -m flask --app app run -p 34343
@@ -52,29 +84,116 @@ Once the dependencies are installed, you can run the API and App separately. Thi
   ```bash
     npm start
     ```
-> Note, the API will not run without the `.mmdb` file. By default it will attempt to download one, however if you already have one downloaded, then you can specify the path to it by setting the `MMDB_PATH` key in the `.env` file. This will prevent the API from attempting to download the `.mmdb` file. For more information, see the First Run section of the [API Documentation](##api).
+  > Note, the API will not run without the `.mmdb` file. By default it will attempt to download one, however if you already have one downloaded, then you can specify the path to it by setting the `MMDB_PATH` key in the `.env` file. This will prevent the API from attempting to download the `.mmdb` file. For more information, see the First Run section of the [API Documentation](#api).
 
-# Documentation
+
+# Requirements Elicitation
+## User Personas
+In order to determine how a user would use an application within the [base requirements](#base-requirements), the following users personas were created:
+
+### Dana Monroe (UP-1)
+Dana is an office secretary who is responsible for managing the office's mailing list. He is not very tech savvy, and is not very familiar with computers.
+
+### John Smith (UP-2)
+John is a software developer who is very familiar with computers. He is very tech savvy, and is very familiar with computers.
+
+### McKinley Kasey (UP-3)
+McKinley is a partially disabled person who is unable to use a mouse. Because of this, they are only able to use a keyboard to navigate the web.
+
+### Courtney Emery (UP-4)
+Courtney is a gamer who plays games in many Discord servers. She is familiar with computers, and is notorious in her friend group for playing practical jokes on her friends.
+
+### Lindsay Leign (UP-5)
+Lindsay is a network engineer working on the bleeding edge of network infrastructure. She is very familiar with the IP protocol, and is very familiar with computers. She is developing an extension to the IP protocol, and needs to be able to test it.
+
+## User Stories
+Derived from the requirements and mock users, the following user stories were created:
+
+### Looking up unknown IP addresses (US-1)
+Dana Monroe often receives "cold-call" style emails, and wants to be able to verify the location of the sender. He has been taught how to look up the IP address of the sender.
+
+As a non-technical user, Dana Monroe wants a tool to verify the location of the sender so that he can begin to determine the credibility of the senders.
+
+### Gathering bulk data for analysis (US-2)
+John Smith is working on a project that requires him to analyze the locations of a group of users. He has a list of IP addresses, and wants to be able to gather the location data for each of them without needing to manually look them up.
+
+John Smith, a technical user, wants a tool which can collect location data for a list of IP addresses, import his existing data for analysis, and export the data without manual copying so that he can focus on the analysis. Additionally, John smith wants to be able to label the IP addresses so that he can easily identify them without needing to merge the data with his existing data.
+
+### Keyboard navigation (US-3)
+McKinley Kasey would like to be able to lookup IP addresses, but is unable to use a mouse. Because of this, they are only able to use a keyboard to navigate the web. 
+
+As a user who is unable to use a mouse, McKinley Kasey wants a tool which can be navigated using only a keyboard so that they can use the tool.
+
+### Looking up multiple valid & invalid IP addresses (US-4)
+Courtney Emery wants to be able to look up the location of her friends, and send them a screenshot of the location data. However, she is not confident what numbers she has are actually IP addresses, and wants to be able to look up multiple numbers at once to save time.
+
+As a user who wants to play a practical joke on her friends, Courtney Emery wants a tool which can look up multiple IP addresses at once without much hassle, and display the results in a way that can be easily shared so that she can play a practical joke on her friends. She also wants to able to put in invalid IP addresses, but have the tool ignore them so that she can save time.
+
+### Looking up non-standard IP addresses (US-5)
+Lindsay Leign is working on a project which requires her to look up the location of non-standard IP addresses. She is developing a new protocol which uses non-standard IP addresses, and wants to be able to look up the location data for these addresses to test her protocol.
+
+As a user who wants to look up non-standard IP addresses, Lindsay Leign wants a tool which can look up non-standard IP addresses so that she can use the tool for her project. She is not concerned with whether the tool tells her that the IP address is invalid, as long as it still attempts to look up the location data.
+
+## Requirements
+### Base Requirements
+A web form must be created which allows a user to enter an IP address. Once the user submits the form, the following information must be displayed:
+ - Country Code
+ - Postal Code
+ - City Name
+ - Timezone
+ - Accuracy Radius
+
+Further, to gather this information, it must use the [MaxMind GeoLite2 City Database](https://dev.maxmind.com/geoip/geoip2/geolite2/). 
+> Note, though MaxMind offers a web service, the database files must be used as a restriction of the assignment.
+
+In order to parse the `.mmdb` file, a library linked on [MaxMind's Developer Site](https://dev.maxmind.com/geoip/docs/databases?lang=en#api-clients) must be used.
+
+### Derived Requirements
+Based off the above user stories and the base requirements, I have added the following requirements:
+
+> Note, these requirements represent a lot of scope-creep, and are not required to be completed for the assignment. However, I have included them as they both represent a more complete solution (in my opinion), and because I was having fun with the project. In a real-world scenario, I would have discussed these requirements with the stakeholders to determine if they were necessary, and if so, how they would be prioritized.
+
+Requirements derived from US-1:
+ - The web form must be able to show users the location of the IP address they entered. (R-1)
+ - The web form must be able to show users if the IP address they entered is invalid. (R-2)
+ - The web form must be able to show users if the IP address they entered is not found in the database. (R-3)
+ - The web form must be navigable by users with little-to-no knowledge of IP addresses. (R-4)
+
+Requirements derived from US-2:
+ - The web form must be able to import a list of IP addresses from a file. (R-5)
+ - The web form must inform users how to format the file for import. (R-6)
+ - The web form must be able to export the location data to a standardized file-type. (R-7)
+ - The web form must be able to label IP addresses so that users can easily identify them. (R-8)
+
+Requirements derived from US-3:
+ - The web form must be navigable using only a keyboard. (R-9)
+ - Users must not need to guess what element is currently selected. (R-10)
+
+Requirements derived from US-4:
+ - The web form must be able to look up multiple IP addresses at once without using the import feature. (R-11)
+ - The web form must not fail to provide information if an invalid IP address is entered. (R-12)
+ - The web form must not fail to provide information if an IP address is not found in the database. (R-13)
+ - The web form must be able to display the results in a way that can be easily shared. (R-14)
+
+Requirements derived from US-5:
+ - The web form must allow users to specify an IP address is non-standard, and still attempt to look up the location data. (R-15)
+
+# Design
 ## API
-This API is written in Python using Flask in coordination with the geoip2 `.mmdb` reader library.
+The API needs to be able to interface with a `.mmdb` file to retrieve the location data. In order to do this, a required license key, or path to the `.mmdb` file must be provided. On the first run, the API will download and save the most recent version of the `.mmdb` file in the root directory of the server. 
+> Note, this is not a good practice, and in a real-world scenario, it would likely be better to store the `.mmdb` file either in a database, or in a separate file server. This implementation was chosen for simplicity and due to the fact that this project is not being deployed to a production environment. For more information on this, see the [deployment considerations](#deployment-considerations) section.
 
-### First Run
-When running the API it is possible to specify a path which the `.mmdb` file can be located at. If none is provided then in order to properly access the `.mmdb` file, the API will attempt to download & unzip the `.mmdb` file using the provided MaxMind license key. Should this fail for any reason, a warning will be provided and the api will automatically terminate.
+Once the `.mmdb` file is accessible, a RESTful server will be created which will allow users to access the location data. This server will expose 3 endpoints:
+ - A health check endpoint which will always return a `200` response.
+ - An endpoint to lookup a single IP address.
+ - An endpoint to bulk lookup IP addresses which uses multiprocessing to speed up the process.
 
-To specify a path to the `.mmdb` file, you can set the `MMDB_PATH` key in the `.env` file. This will prevent the API from attempting to download the `.mmdb` file. By default this key is not set, so the API will attempt to download the `.mmdb` file.
-example:
-```
-MMDB_PATH=/path/to/GeoLite2-City.mmdb
-```
-
-Once the API has access to a `.mmdb` file, it will be accessible at [localhost:34343](http://localhost:34343/). This can be verified by hitting the [health check endpoint](http://localhost:34343/health-check/)
-
-### Endpoints
-#### GET `/health-check`
+# Endpoints
+## GET `/health-check`
 - Always returns a `200` response with the text `"Healthy!"`.
 - If this is not returned, then the API is not running properly, or you are not accessing the correct host.
 
-#### GET `/ip/<ip_address>`
+## GET `/ip/<ip_address>`
 - If `<ip_address>` is both valid, and exists within the `.mmdb` file, then a `200` response is returned with the following JSON:
   ```json
   {
@@ -91,12 +210,14 @@ Once the API has access to a `.mmdb` file, it will be accessible at [localhost:3
 - If `<ip_address>` is invalid, then a `400` response is returned with the following JSON:
   ```json
   {
+    "ip_address": "string <ip_address>",
     "error": "string <error_message>"
   }
   ```
 - If `<ip_address>` is valid, but does not exist within the `.mmdb` file, then a `404` response is returned with the following JSON:
   ```json
   {
+    "ip_address": "string <ip_address>",
     "error": "string <error_message>"
   }
   ```
@@ -116,6 +237,7 @@ Body
 {
     "ip_addresses": [
         {
+            "status": 200,
             "ip_address": "string <ip_address>",
             "country_code": "string <country_code>",
             "postal_code": "string <postal_code>",
@@ -126,6 +248,13 @@ Body
             "longitude": "float <longitude>"
         },
         {
+            "status": 400,
+            "ip_address": "string <ip_address>",
+            "error": "string <error_message>"
+        },
+        {
+            "status": 404,
+            "ip_address": "string <ip_address>",
             "error": "string <error_message>"
         },
         ...
@@ -135,10 +264,7 @@ Body
 - This endpoint should always be used when fetching multiple ip's, as it uses `multiprocessing` under the hood to simultaneously query the `.mmdb` file. This allows for a significant speedup when querying multiple ip's.
 - This endpoint is made using a POST request as it is possible that the list of ip's could be too large to fit in a GET request. This is unlikely, but possible. This is also why the list of ip's is sent in the body of the request, rather than as a query parameter. In the future, it may be worth considering responding with a `303`, and providing a link to a file containing the results of the request. This would allow for the request to be made using a GET request, and would allow for the results to be cached. This however would require an additional database to be setup, and is likely outside the scope of this assignment.
 
-## App
-This app is written in React using TypeScript. It is configured to be un-opinionated on how & where it is hosted. In the future, SSR could be added to this project, but it is not currently implemented as it is unclear how necessary it is for this project.
-
-## Deployment Considerations
+# Deployment Considerations
 Though this implementation attempts to create a production-ready version of this assignment,
 it is not being deployed. In order to make this project deployment-ready, a few concerns must
 be solved:
