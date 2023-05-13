@@ -72,6 +72,7 @@ In order to run the app, you will need to install the dependencies for both the 
     source venv/bin/activate
     pip install -r requirements.txt
     ```
+    - You will know that the venv is active when you see `(venv)` at the beginning of your terminal prompt. If you do not see this, then the venv is not active, and you will need to run `source venv/bin/activate` again. If you want to run using a venv, then you will need to ensure that you see this `(venv)` before following the [Running the app](#running-the-app) section.
 > Note, if you are using Windows, you will need to use `venv\Scripts\activate` instead of `source venv/bin/activate`.
 
 ## Running the app
