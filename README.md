@@ -86,6 +86,7 @@ Once the dependencies are installed, you can run the API and App separately. Thi
   ```bash
     npm start
     ```
+    - If a browser window does not open automatically, then you can open a browser and navigate to `http://localhost:3000` to view the app.
   > Note, the API will not run without the `.mmdb` file. By default it will attempt to download one, however if you already have one downloaded, then you can specify the path to it by setting the `MMDB_PATH` key in the `.env` file. This will prevent the API from attempting to download the `.mmdb` file. For more information, see the First Run section of the [API Documentation](#api).
 
 
