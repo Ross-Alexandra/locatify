@@ -330,32 +330,30 @@ Body
 
 - The response from this endpoint is the same as if a list of `GET /ip/<ip_address>` requests were made. IE, The response will be shaped like the following body (depending on the result of each lookup):
 ```json
-{
-    "ip_addresses": [
-        {
-            "status": 200,
-            "ip_address": "string <ip_address>",
-            "country_code": "string <country_code>",
-            "postal_code": "string <postal_code>",
-            "city": "string <city_name>",
-            "time_zone": "string <time_zone>",
-            "accuracy_radius": "int <accuracy_radius>",
-            "latitude": "float <latitude>",
-            "longitude": "float <longitude>"
-        },
-        {
-            "status": 400,
-            "ip_address": "string <ip_address>",
-            "error": "string <error_message>"
-        },
-        {
-            "status": 404,
-            "ip_address": "string <ip_address>",
-            "error": "string <error_message>"
-        },
-        ...
-    ]
-}
+[{
+        "status": 200,
+        "ip_address": "string <ip_address>",
+        "country_code": "string <country_code>",
+        "postal_code": "string <postal_code>",
+        "city": "string <city_name>",
+        "time_zone": "string <time_zone>",
+        "accuracy_radius": "int <accuracy_radius>",
+        "latitude": "float <latitude>",
+        "longitude": "float <longitude>"
+    },
+    {
+        "status": 400,
+        "ip_address": "string <ip_address>",
+        "error": "string <error_message>"
+    },
+    {
+        "status": 404,
+        "ip_address": "string <ip_address>",
+        "error": "string <error_message>"
+    },
+    ...
+]
+
 ```
 - This endpoint should always be used when fetching multiple ip's, as it will batch your request over multiple CPU cores.
 
