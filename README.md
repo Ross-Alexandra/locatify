@@ -191,6 +191,96 @@ Once the `.mmdb` file is accessible, a RESTful server will be created which will
  - An endpoint to lookup a single IP address.
  - An endpoint to bulk lookup IP addresses which uses multiprocessing to speed up the process.
 
+## App
+The app will be a single page application with some basic routing. It will be built using React/TypeScript, and will be styled using the `emotion` library. The app will be hosted on a separate server from the API, and will use the API to retrieve the location data.
+
+The app will have 4 pages:
+ - A home page which will allow users to enter an IP address (or multiple IP addresses) to look up.
+ - A bulk lookup page which will allow users to upload a `.csv` of IP addresses to look up.
+ - A results page which will display the location data for the IP addresses entered.
+ - An error page which will display if any unrecoverable errors are encountered while looking up the IP addresses (such as 500 errors).
+
+ Both the results & error pages will automatically redirect to the home page if the user does not navigate to them using the app's routing. This is to prevent users from accessing the results page without having entered an IP address, or from accessing the error page without having encountered an error.
+
+## Requirement-specific implementation plan
+### R-1
+The results page will show the location data for each IP address entered. Specifically, it will show the following information:
+ - The IP address,
+ - The provided label (if any),
+ - Country Code
+ - Postal Code
+ - City Name
+ - (local time & Timezone)
+ - Accuracy Radius (in km)
+ - A map showing the location of the IP address (if available)
+
+If any of this information cannot be retrieved, then the individual fields will be marked as "unknown".
+
+### R-2
+Within the same view as the successful IPs, a card will be shown for each invalid IP address entered. This card will show the IP address, label (if applicable), and a message stating that the IP address is invalid.
+
+### R-3
+Within the same view as the successful IPs, a card will be shown for each IP address that was not found in the database. This card will show the IP address, label (if applicable), and a message stating that the IP address was not found in the database.
+
+### R-4
+The home page will have a form with a single input field asking for an IP Address. This will reduce confusion for inexperienced users. Further, the color of the borders around the input will be red if the IP address is suspected to be invalid (based off of an IP address regex), and blue if the IP address is suspected to be valid. This will allow users to easily identify if they have entered an invalid IP address.
+
+### R-5
+The bulk lookup page will allow users to upload a `.csv` file containing IP addresses and labels.
+
+### R-6
+An example `.csv` file will be provided which users can download and fill out. This file will be formatted as follows:
+```
+ip_address,label
+```
+
+### R-7
+The results page will have a button which will allow users to download the results as a `.json` file. The contents of this `.json` file will be the same as the response from the API.
+
+### R-8
+Both the home page, and the `.csv` will provide the ability to label IP addresses. This label will be displayed in the results page next to the IP address.
+
+### R-9
+The app will minimize the use of mouse events, and where absolutely required will also support keyboard events. This will allow users to navigate the app using only a keyboard.
+
+Specifically:
+- Icons buttons will be implemented to allow for a user to press the `enter` key to interact with them. Additionally, when layout shifts are required, the focus will be moved to the new element that has been added to the DOM.
+- The file upload button will be implemented to allow for a user to press the `enter` key to interact with it.
+
+### R-10
+All elements which are styled to look different from default HTML elements will include css to ensure that they are visually distinct when focused. Additionally, elements which are interactive but are not tabbable by default will be made tabbable.
+
+### R-11
+The home page will allow users to enter multiple IP addresses at once. This will be done by adding a '+' button next to the input field. When this button (or the enter key) is pressed, a new input field will be added to the DOM. This will allow users to enter multiple IP addresses at once, and will also allow users to enter IP addresses without having to scroll down the page.
+
+### R-12
+If an invalid IP is provided, the input field will be highlighted in red. If a user searches anyways, they will be brought to the results page and all IPs will still be searched. The invalid IP will be shown in the results page with a message stating that the IP is invalid.
+
+### R-13
+If a user searches for an IP address which does not exist in the database, they will be brought to the results page and all IPs will still be searched. The IP address will be shown in the results page with a message stating that the IP address was not found in the database.
+
+### R-14
+The app will be responsive, and will work on mobile devices. Additionally, the app will attempt to display as much information as possible in a single view for each IP address. This will ensure that users do not have to scroll horizontally to view all of the information for an IP address.
+
+### R-15
+The app will attempt to warn users that an IP address is invalid (by highlighting the input field in red), but will not prevent them from searching for it. This is to prevent users from being unable to search for an IP address which is valid, but is not recognized by the app.
+
+Note, this implementation is inspired by forms which allow users to enter an email address, but do not prevent them from entering an invalid email address. This is considered to be a better user experience than preventing users from entering an invalid email address, as the email spec is very complex and it is difficult to validate an email address. This is also the case for IP addresses, as there are many different types of IP addresses, and it is difficult to validate them all. This implementation also helps future-proof the app, as even if it is not updated should a new ip-spec be released, as long as it has access to a new database file it will still show results.
+
+> While testing the database, I discovered that the database file already contains some IP addresses which are technically not valid. For example, using May 12th version of the database, searching for the IP address `1.1.1` yielded the following result. Because of this, I decided that including this requirement would be a good idea.
+```json
+{
+  "accuracy_radius": 1000,
+  "city": null,
+  "country_code": "CN",
+  "ip_address": "1.1.1",
+  "latitude": 34.7732,
+  "longitude": 113.722,
+  "postal_code": null,
+  "time_zone": "Asia/Shanghai"
+}
+```
+
 # Endpoints
 ## GET `/health-check`
 - Always returns a `200` response with the text `"Healthy!"`.
