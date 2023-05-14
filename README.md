@@ -184,7 +184,7 @@ Requirements derived from US-5:
 # Design
 ## API
 The API needs to be able to interface with a `.mmdb` file to retrieve the location data. In order to do this, a required license key, or path to the `.mmdb` file must be provided. On the first run, the API will download and save the most recent version of the `.mmdb` file in the root directory of the server. 
-> Note, this is not a good practice, and in a real-world scenario, it would likely be better to store the `.mmdb` file either in a database, or in a separate file server. This implementation was chosen for simplicity and due to the fact that this project is not being deployed to a production environment. For more information on this, see the [deployment considerations](#deployment-considerations) section.
+> Note, this is not a good practice, and in a real-world scenario, it would likely be better to store the IP information in a database, or host the `.mmdb` file in a separate file server. This implementation was chosen for simplicity and due to the fact that this project is not being deployed to a production environment. For more information on this, see the [deployment considerations](#deployment-considerations) section.
 
 Once the `.mmdb` file is accessible, a RESTful server will be created which will allow users to access the location data. This server will expose 3 endpoints:
  - A health check endpoint which will always return a `200` response.
