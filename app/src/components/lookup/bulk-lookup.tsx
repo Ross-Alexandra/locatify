@@ -1,11 +1,9 @@
 import styled from '@emotion/styled';
-import * as csv from 'csv-parse/browser/esm/sync';
-import _ from 'lodash';
 import React from 'react';
-import { v4 as uuidv4 } from 'uuid';
 
 import { ManualIcon, SearchIcon } from '../../icons';
 import { FileUploadIcon } from '../../icons/file-upload-icon';
+import { csvRecordToIpAddressList, parseCSV } from '../../services/csv';
 import { theme } from '../../theme';
 import { IpAddress } from '../../types';
 import { Button } from '../ui';
@@ -91,37 +89,16 @@ export const BulkLookup: React.FC<BulkLookupProps> = ({
     const [parsing, setParsing] = React.useState(false);
 
     const [ips, setIps] = React.useState<IpAddress[]>([]);
-    const onFileChange = React.useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-            const text = reader.result as string;
-            const records = csv.parse(text, {
-                columns: true,
-                skip_empty_lines: true,
-                ltrim: true,
-                rtrim: true,
-            });
-
-            const defaultedRecords = records.map((record: unknown) => _.defaults(record, {
-                id: uuidv4(),
-                ip: '',
-                tag: '',   
-            }));
-
-            const safeRecords: IpAddress[] = _.map(
-                defaultedRecords,
-                record => _.pick(record, ['id', 'ip', 'tag'])
-            );
-
-            setIps(safeRecords);
-            setParsing(false);
-        };
-
+    const onFileChange = React.useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
-        if (file) {
-            setParsing(true);
-            reader.readAsText(file);
-        }
+        if (!file) return;
+
+        setParsing(true);
+        const csvRecords = await parseCSV(file);
+        const ipAddresses = csvRecordToIpAddressList(csvRecords);
+
+        setIps(ipAddresses);
+        setParsing(false);
     }, [setIps, setParsing]);
 
     const filledIps = React.useMemo(() => {
@@ -184,7 +161,7 @@ export const BulkLookup: React.FC<BulkLookupProps> = ({
             </div>
 
             {filledIps.length > 0 && (
-                <div className='ips'>
+                <div className='ips' data-testid='bulk-ip-table'>
                     <div className='row'>
                         <h3>IP</h3>
                         <h3>Label</h3>

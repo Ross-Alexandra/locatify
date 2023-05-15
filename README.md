@@ -22,6 +22,10 @@ docker-compose up
 
 This will build the Docker image, and run in a standalone way. This docker image is configured for development, and will run in a way that allows for hot reloading of the API and App code, so any changes made to the code will be reflected in the running container. This is useful for development, but not recommended for production. For a breakdown of what is needed to get this project deployment-ready, see the [Deployment Considerations](#deployment-considerations) section.
 
+Once the container has finished building, you will be able to access:
+ - The app at [localhost:3000](http://localhost:3000)
+ - The API at [localhost:34343](http://localhost:34343/health-check)
+
 ## Using Python & Node
 ### Installing the prerequisites
 This app uses a Python backend with a React frontend. In order to run this project, you will need to have the following installed:
@@ -89,6 +93,19 @@ Once the dependencies are installed, you can run the API and App separately. Thi
     - If a browser window does not open automatically, then you can open a browser and navigate to `http://localhost:3000` to view the app.
   > Note, the API will not run without the `.mmdb` file. By default it will attempt to download one, however if you already have one downloaded, then you can specify the path to it by setting the `MMDB_PATH` key in the `.env` file. This will prevent the API from attempting to download the `.mmdb` file. For more information, see the First Run section of the [API Documentation](#api).
 
+# Testing
+## Frontend
+The frontend tests use the [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/). These tests can be run by running the following command from the app directory:
+```bash 
+npm run test
+```
+
+## Backend
+The backend tests use the [PyTest](https://docs.pytest.org/en/7.1.x/getting-started.html) framework. These tests can be run by running the following command from the api directory:
+```bash
+pytest
+```
+> __WARNING__: You will also need to have your `venv` activated if you are using one in order to run the tests. For more information on how to do this, see the [Installing the dependencies](#installing-the-dependencies) section.
 
 # Requirements Elicitation
 ## User Personas
@@ -380,3 +397,9 @@ be solved:
 - Once this assignment has been reviewed and I have been given permission to release it publicly, the backend should likely be refactored to use a more scalable solution for looking up IP addresses. For more information about this, see the [Deployment Considerations](#deployment-considerations) section. Likely the next steps would be to create a separate database service, and use automatic re-downloading and conversion of MaxMind's offered `.csv` format, and using a more standard SQL database setup.
 
 - The maps displayed after a user looks up an IP address currently don't show any information about the accuracy of the provided pin. This was entirely out of scope on this project, however I would be interested in adding a circle around the pin to show the accuracy radius of the provided IP address. This would require using the maps API to draw a circle around the pin, which in turn would require additional permissions on the API key (additional permissions which would have likely caused that key to become un-sharable). Because of this, I have not added this feature as it would require that a Google Maps API key be provided in the `.env` file, which in turn would require the reviewer to create their own Google Maps API key.
+
+- Once a CI/CD pipeline is setup, automatic failure of PRs should happen in the event that:
+  - The api is not properly formatted using `black`.
+  - The frontend is not properly linted.
+  - the api does not pass all tests.
+  - The frontend does not pass all tests.
