@@ -24,7 +24,6 @@ def get_ip_info(reader, ip_address):
         }
     
     except Exception as e:
-        print(e)
         return {
             "status": 400,
             "ip_address": ip_address,
