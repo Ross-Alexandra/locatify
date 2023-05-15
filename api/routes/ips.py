@@ -1,6 +1,6 @@
 from api.app import app
 from api.routes import mmdb_reader
-from api.helpers.get_ip_info import get_ip_info
+from api.route_functions.get_ip_info import get_ip_info
 
 from flask import request
 import multiprocessing

@@ -19,7 +19,6 @@ const Wrapper = styled.div`
     grid-template-rows: repeat(2, minmax(0, 1fr));
     gap: 10px;
 
-
     iframe {
         width: 100%;
         height: 100%;

@@ -6,7 +6,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --watchAll=false",
+    "test:watch": "react-scripts test --watchAll=true",
     "lint": "eslint src/* --fix",
     "eject": "react-scripts eject",
     "deploy": "npm run build && firebase deploy"
@@ -57,5 +58,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "jest": {
+    "moduleNameMapper": {
+        "csv-parse/browser/esm/sync": "<rootDir>/node_modules/csv-parse/dist/esm/sync.js"
+    }
   }
 }

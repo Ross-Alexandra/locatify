@@ -5,16 +5,16 @@ export interface IpAddress {
 }
 
 export interface IpSuccess {
+    ip_address: string,
+    country_code?: string,
+    postal_code?: string,
+    city?: string,
+    time_zone?: string,
+    latitude?: number,
+    longitude?: number,
+    accuracy_radius?: number,
     status?: 200;
     tag?: string;
-    ip_address: string,
-    country_code: string,
-    postal_code: string,
-    city: string,
-    time_zone: string,
-    latitude: number,
-    longitude: number,
-    accuracy_radius: number,
 }
 
 export interface IpError {
