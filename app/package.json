@@ -10,7 +10,9 @@
     "test:watch": "react-scripts test --watchAll=true",
     "lint": "eslint src/* --fix",
     "eject": "react-scripts eject",
-    "deploy": "npm run build && firebase deploy"
+    "deploy": "npm run build && firebase deploy",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@emotion/react": "^11.9.0",
@@ -37,15 +39,28 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
+    "@storybook/addon-essentials": "^7.0.12",
+    "@storybook/addon-interactions": "^7.0.12",
+    "@storybook/addon-links": "^7.0.12",
+    "@storybook/blocks": "^7.0.12",
+    "@storybook/preset-create-react-app": "^7.0.12",
+    "@storybook/react": "^7.0.12",
+    "@storybook/react-webpack5": "^7.0.12",
+    "@storybook/testing-library": "^0.0.14-next.2",
     "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
+    "babel-plugin-named-exports-order": "^0.0.2",
     "eslint": "^8.22.0",
     "eslint-config-standard-with-typescript": "^22.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-n": "^15.2.4",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.30.1",
-    "typescript": "^4.7.4"
+    "eslint-plugin-storybook": "^0.6.12",
+    "prop-types": "^15.8.1",
+    "storybook": "^7.0.12",
+    "typescript": "^4.7.4",
+    "webpack": "^5.82.1"
   },
   "browserslist": {
     "production": [
@@ -61,7 +76,7 @@
   },
   "jest": {
     "moduleNameMapper": {
-        "csv-parse/browser/esm/sync": "<rootDir>/node_modules/csv-parse/dist/esm/sync.js"
+      "csv-parse/browser/esm/sync": "<rootDir>/node_modules/csv-parse/dist/esm/sync.js"
     }
   }
 }

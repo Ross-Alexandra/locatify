@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
 import React from 'react';
 
-import { MissingIcon } from '../../icons';
-import { theme } from '../../theme';
-import { IpNotFound } from '../../types';
+import { MissingIcon } from '../../../icons';
+import { theme } from '../../../theme';
+import { IpNotFound } from '../../../types';
 
 const Wrapper = styled.div`
     ${theme.card}

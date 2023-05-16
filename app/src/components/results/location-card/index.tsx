@@ -2,11 +2,11 @@ import styled from '@emotion/styled';
 import moment from 'moment-timezone';
 import React from 'react';
 
-import { AccuracyIcon, LocationIcon, PostalCodeIcon } from '../../icons';
-import { ClockIcon } from '../../icons/clock-icon';
-import { getMapUrl } from '../../services/maps';
-import { theme } from '../../theme';
-import { IpSuccess } from '../../types';
+import { AccuracyIcon, LocationIcon, PostalCodeIcon } from '../../../icons';
+import { ClockIcon } from '../../../icons/clock-icon';
+import { getMapUrl } from '../../../services/maps';
+import { theme } from '../../../theme';
+import { IpSuccess } from '../../../types';
 
 const Wrapper = styled.div`
     ${theme.card}
@@ -77,6 +77,7 @@ export const LocationCard: React.FC<LocationCardProps> = ({
     return (
         <Wrapper {...props}>
             <div className='google-embed'>
+                {/* Using boolean here is fine, since 0, 0 lat & long (ie null island) is also not found */}
                 {ipData.latitude && ipData.longitude ? (
                     <iframe
                         title='Google Maps'

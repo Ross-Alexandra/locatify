@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
 import React from 'react';
 
-import { RemoveIcon, TagIcon, UntagIcon } from '../../icons';
-import { ipRegex } from '../../services/ip';
-import { theme } from '../../theme';
-import { Input } from '../ui/input';
+import { RemoveIcon, TagIcon, UntagIcon } from '../../../icons';
+import { ipRegex } from '../../../services/ip';
+import { theme } from '../../../theme';
+import { Input } from '../../ui/input';
 
 const Wrapper = styled.div`
     display: flex;

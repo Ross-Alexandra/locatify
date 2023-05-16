@@ -8,11 +8,11 @@ import userEvent from '@testing-library/user-event';
 import { act } from 'react-dom/test-utils';
 import { BrowserRouter } from 'react-router-dom';
 
-import { parseCSV, csvRecordToIpAddressList } from '../../services/csv';
+import { parseCSV, csvRecordToIpAddressList } from '../../../services/csv';
 
-import { BulkLookup } from './bulk-lookup';
+import { BulkLookup } from '.';
 
-jest.mock('../../services/csv', () => ({
+jest.mock('../../../services/csv', () => ({
     parseCSV: jest.fn(),
     csvRecordToIpAddressList: jest.fn(),
 }));
