@@ -1,14 +1,14 @@
 from api.app import app
-from api.routes import mmdb_reader
+from api.app import mmdb_location
 from api.route_functions.get_ip_info import get_ip_info
 
 from flask import request
 import multiprocessing
-
+import geoip2.database
 
 def get_ip_info_wrapper(ip_address):
-    return get_ip_info(mmdb_reader.reader, ip_address)
-
+    with geoip2.database.Reader(mmdb_location) as reader:
+        return get_ip_info(reader, ip_address)
 
 @app.route("/ips/", methods=["POST"])
 def get_bulk_ips():
