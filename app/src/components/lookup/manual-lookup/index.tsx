@@ -77,6 +77,11 @@ export const ManualLookup: React.FC<ManualLookupProps> = ({
         });
     }, [setIps]);
 
+    const appendInFlightIp = React.useCallback(() => {
+        appendIp(inFlightIp);
+        setInFlightIp(null);
+    }, [appendIp, inFlightIp, setInFlightIp]);
+
     const updateIp = React.useCallback((index: number, nextIp: string) => {
         setIps(previousIps => {
             const previousValue = previousIps[index];
@@ -173,9 +178,7 @@ export const ManualLookup: React.FC<ManualLookupProps> = ({
                     pattern={ipRegex.source}
                     onKeyDown={e => {
                         if (e.key === 'Enter') {
-                            appendIp(inFlightIp);
-
-                            setInFlightIp(null);
+                            appendInFlightIp();
                         }
                     }}
                 />
@@ -183,14 +186,12 @@ export const ManualLookup: React.FC<ManualLookupProps> = ({
                     width={24}
                     color="var(--text-color)"
                     onClick={() => {
-                        appendIp(inFlightIp);
-                        setInFlightIp(null);
+                        appendInFlightIp();
                     }}
                     tabIndex={0}
                     onKeyDown={e => {
                         if (e.key === 'Enter') {
-                            appendIp(inFlightIp);
-                            setInFlightIp(null);
+                            appendInFlightIp();
                         }
                     }}
                 />
