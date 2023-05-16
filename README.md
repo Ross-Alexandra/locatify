@@ -100,6 +100,12 @@ The frontend tests use the [React Testing Library](https://testing-library.com/d
 npm run test
 ```
 
+Additionally, the frontend has been configured to use Storybook. This can be run by running the following command from the app directory:
+```bash
+npm run storybook
+```
+Storybook will open a browser window, and will allow you to view the components in isolation. This is useful for development, and can be used to test the components in a way that is not easy with the unit tests.
+
 ## Backend
 The backend tests use the [PyTest](https://docs.pytest.org/en/7.1.x/getting-started.html) framework. These tests can be run by running the following command from the api directory:
 ```bash

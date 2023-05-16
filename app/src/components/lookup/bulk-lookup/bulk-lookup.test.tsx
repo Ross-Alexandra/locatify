@@ -12,7 +12,7 @@ import { parseCSV, csvRecordToIpAddressList } from '../../../services/csv';
 
 import { BulkLookup } from '.';
 
-jest.mock('../../services/csv', () => ({
+jest.mock('../../../services/csv', () => ({
     parseCSV: jest.fn(),
     csvRecordToIpAddressList: jest.fn(),
 }));
