@@ -115,9 +115,9 @@ export function App() {
             return;
         }
 
+        setIpData([]);
         setIpDataState('loading');
         navigate('/results');
-
         if (ipSet.length === 1) {
             try {
                 const { data: ipData } = await api.get<IpData>(`/ip/${ipSet[0].ip}`);
@@ -155,7 +155,7 @@ export function App() {
         }
 
         setIpDataState('success');
-    }, [setIpDataState, navigate]);
+    }, [setIpDataState, navigate, setIpData]);
 
     return (
         <>

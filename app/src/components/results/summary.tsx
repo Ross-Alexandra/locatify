@@ -55,6 +55,10 @@ const Wrapper = styled.div`
     }
 `;
 
+const SummarySpinner = styled(Spinner)`
+    grid-column: 1 / -1;
+`;
+
 function downloadJsonObject(object: unknown) {
     const data = JSON.stringify(object, null, 2);
     const blob = new Blob([data], { type: 'application/json' });
@@ -77,7 +81,7 @@ export const Summary: React.FC<SummaryProps> = ({
     isLoading,
     ...props
 }) => {
-    if (isLoading) return <Spinner />;
+    if (isLoading) return <SummarySpinner />;
 
     const statusCounts = _.countBy(ipData, 'status');
     const successCount = _.get(statusCounts, '200', 0) + _.get(statusCounts, 'undefined', 0);

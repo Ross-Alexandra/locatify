@@ -71,7 +71,6 @@ def get_mmdb_location():
         no_license_no_path()
 
     elif MMDB_PATH is not None:
-        print("MMDB_PATH", MMDB_PATH)
         # If the file exists, return the path.
         if os.path.exists(MMDB_PATH):
             return MMDB_PATH
