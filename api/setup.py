@@ -4,9 +4,9 @@ import tarfile
 import glob
 import shutil
 
-license = os.environ.get("LICENSE_KEY", None) or None
-mmdb_path = os.environ.get("MMDB_PATH", None) or None
-default_mmdb_path = "/maxmind-db/GeoLite2-City.mmdb"
+LICENSE = os.environ.get("LICENSE_KEY", None) or None
+MMDB_PATH = os.environ.get("MMDB_PATH", None) or None
+FILE_NAME = "GeoLite2-City.mmdb"
 
 
 def no_license_no_path():
@@ -22,54 +22,72 @@ def path_exists_but_not_file():
 
 
 def download_mmdb_file():
+    download_directory = "/maxmind-db/tmp"
+
     try:
-        download_url = f"https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key={license}&suffix=tar.gz"
+        download_url = f"https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key={LICENSE}&suffix=tar.gz"
         handle = requests.get(download_url, stream=True)
         file = tarfile.open(fileobj=handle.raw, mode="r|gz")
-        file.extractall(path="/maxmind-db/tmp")
+        try:
+            file.extractall(path=download_directory)
+        except:
+            # If we're in an environment where we can't write to the root directory, try to write to the parent directory.
+            download_directory = "../maxmind-db/tmp"
+            file.extractall(path=download_directory)
     except Exception as e:
         raise Exception(
-            f"An error occurred while downloading the MaxMind database file: {e}. Please verify that the LICENSE_KEY environment variable is correct, or specify a MMDB_PATH."
+            f"An error occurred while downloading the MaxMind database file to {download_directory}: {e}. Please verify that the LICENSE_KEY environment variable is correct, or specify a MMDB_PATH."
         )
 
     # The file is extracted to a tmp directory, so we need to move it to the correct location.
-    mmdb_files = glob.glob("/maxmind-db/tmp/**/*.mmdb")
+    mmdb_files = glob.glob(os.path.join(download_directory, "**/*.mmdb"))
     if len(mmdb_files) == 0:
         raise Exception(
             "The MaxMind database file was not found in the downloaded tar.gz file. Please verify that the LICENSE_KEY environment variable is correct, or specify a MMDB_PATH."
         )
 
-    shutil.move(mmdb_files[0], default_mmdb_path)
-    shutil.rmtree("/maxmind-db/tmp")
+    maxmind_folder = download_directory.replace("/tmp", "")
+    file_path = os.path.join(maxmind_folder, FILE_NAME)
+    shutil.move(mmdb_files[0], file_path)
+    shutil.rmtree(download_directory)
+
+    return file_path
+
+
+def download_or_use_license_mmdb_file():
+    root_directory = f"/maxmind-db/{FILE_NAME}"
+    relative_directory = f"../maxmind-db/{FILE_NAME}"
+
+    if os.path.exists(root_directory):
+        return root_directory
+    elif os.path.exists(relative_directory):
+        return relative_directory
+    else:
+        return download_mmdb_file()
 
 
 def get_mmdb_location():
-    if license is None and mmdb_path is None:
+    if LICENSE is None and MMDB_PATH is None:
         no_license_no_path()
 
-    elif mmdb_path is not None:
+    elif MMDB_PATH is not None:
+        print("MMDB_PATH", MMDB_PATH)
         # If the file exists, return the path.
-        if os.path.exists(mmdb_path):
-            return mmdb_path
-        
-        elif os.path.join('..', mmdb_path):
-            return os.path.join('..', mmdb_path)
-        
+        if os.path.exists(MMDB_PATH):
+            return MMDB_PATH
+
+        elif os.path.join("..", MMDB_PATH):
+            return os.path.join("..", MMDB_PATH)
+
         # Otherwise, if the license is set, then we can
         # fallback to downloading the file.
-        elif bool(license):
-            if not os.path.exists(default_mmdb_path):
-                download_mmdb_file()
-
-            return default_mmdb_path
+        elif bool(LICENSE):
+            return download_or_use_license_mmdb_file()
 
         # Otherwise, the file doesn't exist, and the license
         # is not set, so we can't do anything. Throw an Exception.
         else:
             path_exists_but_not_file()
 
-    elif license is not None:
-        if not os.path.exists(default_mmdb_path):
-            download_mmdb_file()
-
-        return default_mmdb_path
+    elif LICENSE is not None:
+        return download_or_use_license_mmdb_file()
