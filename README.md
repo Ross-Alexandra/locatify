@@ -1,5 +1,33 @@
 # Max Mind Assignment
-An implementation of the assignment created by the company MaxMind used during their interview process for their Senior Web Developer/Software Engineer position.
+An implementation of the assignment created by the company MaxMind used during their interview process for their Senior Web Developer/Software Engineer position. Don't be intimidated by the length of this README, most of it is documentation that would generally belong elsewhere: API documentation, user personas and stories, etc. The actual code is relatively small, and can be found in the **_./api_** and **_./app_** directories. To get started, please follow the [Getting Started](#getting-started) section.
+
+## Table of Contents
+- [Getting Started](#getting-started)
+    - [Environment Setup](#environment-setup)
+    - [Using Docker](#using-docker)
+    - [Using Python & Node](#using-python--node)
+        - [Installing the prerequisites](#installing-the-prerequisites)
+        - [Installing the dependencies](#installing-the-dependencies)
+        - [Running the app](#running-the-app)
+- [Testing](#testing)
+    - [Frontend](#frontend)
+    - [Backend](#backend)
+- [Requirements Elicitation](#requirements-elicitation)
+    - [User Personas](#user-personas)
+    - [User Stories](#user-stories)
+- [Requirements](#requirements)
+    - [Base Requirements](#base-requirements)
+    - [Derived Requirements](#derived-requirements)
+- [Design](#design)
+    - [API](#api)
+    - [App](#app)
+    - [Requirement-specific Implementation Plan](#requirement-specific-implementation-plan)
+- [Endpoints](#endpoints)
+    - [GET /health-check](#get-health-check)
+    - [GET /ip](#get-ipip_address)
+    - [POST /ips](#post-ips)
+- [Deployment Considerations](#deployment-considerations)
+- [Future Improvements](#future-improvements)
 
 # Getting Started
 ## Environment Setup
@@ -41,11 +69,11 @@ This app uses a Python backend with a React frontend. In order to run this proje
 > Note, this project was developed using Python 3.10.6, and Node 18.16.0 It is recommended to use these versions, but it is likely that any version of Python 3.6+ and Node 12+ will work.
 
 To install these dependencies, please follow the instructions for your operating system:
-### Windows
+#### Windows
 - Python: [Download](https://www.python.org/downloads/windows/)
 - Node: [Download](https://nodejs.org/en/download/) (this will install both Node and NPM)
 
-### Linux
+#### Linux
 Python:
 ```bash
 sudo apt install python3 python3-pip
@@ -56,7 +84,7 @@ Node:
 sudo apt install nodejs npm
 ```
 
-### Mac
+#### Mac
 Python:
 ```bash
 brew install python3
@@ -167,8 +195,8 @@ Lindsay Leign is working on a project which requires her to look up the location
 
 As a user who wants to look up non-standard IP addresses, Lindsay Leign wants a tool which can look up non-standard IP addresses so that she can use the tool for her project. She is not concerned with whether the tool tells her that the IP address is invalid, as long as it still attempts to look up the location data.
 
-## Requirements
-### Base Requirements
+# Requirements
+## Base Requirements
 A web form must be created which allows a user to enter an IP address. Once the user submits the form, the following information must be displayed:
  - Country Code
  - Postal Code
@@ -181,7 +209,7 @@ Further, to gather this information, it must use the [MaxMind GeoLite2 City Data
 
 In order to parse the `.mmdb` file, a library linked on [MaxMind's Developer Site](https://dev.maxmind.com/geoip/docs/databases?lang=en#api-clients) must be used.
 
-### Derived Requirements
+## Derived Requirements
 Based off the above user stories and the base requirements, I have added the following requirements:
 
 > Note, these requirements represent a lot of scope-creep, and are not required to be completed for the assignment. However, I have included them as they both represent a more complete solution (in my opinion), and because I was having fun with the project. In a real-world scenario, I would have discussed these requirements with the stakeholders to determine if they were necessary, and if so, how they would be prioritized.
@@ -347,7 +375,7 @@ Note, this implementation is inspired by forms which allow users to enter an ema
   }
   ```
 
-### POST `/ips`
+## POST `/ips`
 Body
 ```json
 {
@@ -405,7 +433,7 @@ be solved:
 - The backend API currently has basic CORS configuration allowing all routes, this is not suitable for a production environment.
     - This would be solved depending on the deployment solution, but would likely be solved with environment variables, or a configuration file to allow for the CORS configuration to be changed without needing the code to be environment-aware.
 
-## Future Improvements
+# Future Improvements
 
 - Once this assignment has been reviewed and I have been given permission to release it publicly, the backend should likely be refactored to use a more scalable solution for looking up IP addresses. For more information about this, see the [Deployment Considerations](#deployment-considerations) section. Likely the next steps would be to create a separate database service, and use automatic re-downloading and conversion of MaxMind's offered `.csv` format, and using a more standard SQL database setup.
 
