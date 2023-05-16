@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
 import React from 'react';
 
-import { ErrorIcon } from '../../icons';
-import { theme } from '../../theme';
-import { IpError } from '../../types';
+import { ErrorIcon } from '../../../icons';
+import { theme } from '../../../theme';
+import { IpError } from '../../../types';
 
 const Wrapper = styled.div`
     ${theme.card}

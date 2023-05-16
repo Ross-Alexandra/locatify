@@ -2,14 +2,13 @@ import styled from '@emotion/styled';
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { BulkIcon, NewItemIcon, SearchIcon } from '../../icons';
-import { ipRegex } from '../../services/ip';
-import { theme } from '../../theme';
-import { IpAddress } from '../../types';
-import { Button } from '../ui';
-import { Input } from '../ui/input';
-
-import { LookupInput } from './lookup-input';
+import { BulkIcon, NewItemIcon, SearchIcon } from '../../../icons';
+import { ipRegex } from '../../../services/ip';
+import { theme } from '../../../theme';
+import { IpAddress } from '../../../types';
+import { Button } from '../../ui';
+import { Input } from '../../ui/input';
+import { LookupInput } from '../lookup-input';
 
 const Wrapper = styled.div`
     .existing-ips {

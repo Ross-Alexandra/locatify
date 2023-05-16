@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import _ from 'lodash';
 import { act } from 'react-dom/test-utils';
 
-import { LookupInput } from './lookup-input';
+import { LookupInput } from '.';
 
 test('Ip inputs with invalid ips should have error-color borders', () => {
     const { container } = render(<LookupInput

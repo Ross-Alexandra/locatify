@@ -1,14 +1,14 @@
 import styled from '@emotion/styled';
 import React from 'react';
 
-import { ManualIcon, SearchIcon } from '../../icons';
-import { FileUploadIcon } from '../../icons/file-upload-icon';
-import { csvRecordToIpAddressList, parseCSV } from '../../services/csv';
-import { theme } from '../../theme';
-import { IpAddress } from '../../types';
-import { Button } from '../ui';
-import { Input } from '../ui/input';
-import { Spinner } from '../ui/spinner';
+import { ManualIcon, SearchIcon } from '../../../icons';
+import { FileUploadIcon } from '../../../icons/file-upload-icon';
+import { csvRecordToIpAddressList, parseCSV } from '../../../services/csv';
+import { theme } from '../../../theme';
+import { IpAddress } from '../../../types';
+import { Button } from '../../ui';
+import { Input } from '../../ui/input';
+import { Spinner } from '../../ui/spinner';
 
 const Wrapper = styled.div`
     .upload {

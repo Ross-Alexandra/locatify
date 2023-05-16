@@ -1,8 +1,8 @@
 import { getByText, render } from '@testing-library/react';
 
-import { IpSuccess } from '../../types';
+import { IpSuccess } from '../../../types';
 
-import { LocationCard } from './location-card';
+import { LocationCard } from '.';
 
 test('LocationCard should show the tag and ip address if a tag is provided', () => {
     const ipData: IpSuccess = {

@@ -21,7 +21,7 @@ import {
     IpNotFound,
 } from './types';
 
-const rootCSS = css`
+export const rootCSS = css`
     * {
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
