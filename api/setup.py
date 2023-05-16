@@ -17,7 +17,7 @@ def no_license_no_path():
 
 def path_exists_but_not_file():
     raise Exception(
-        "The MMDB_PATH environment variable is set, but the file does not exist."
+        "The MMDB_PATH environment variable is set, but the file does not exist as specified or relative to the /api path. Please verify that the file exists, or specify an absolute path to the file."
     )
 
 
@@ -51,7 +51,10 @@ def get_mmdb_location():
         # If the file exists, return the path.
         if os.path.exists(mmdb_path):
             return mmdb_path
-
+        
+        elif os.path.join('..', mmdb_path):
+            return os.path.join('..', mmdb_path)
+        
         # Otherwise, if the license is set, then we can
         # fallback to downloading the file.
         elif bool(license):

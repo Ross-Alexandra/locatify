@@ -6,12 +6,19 @@ An implementation of the assignment created by the company MaxMind used during t
 **Before following any instructions below**
 You will need to create a `.env` file. This can be accomplished by copying the `template.env` file, and renaming it to `.env`. 
 
-In order to start the app, you will need to either provide a `LICENSE_KEY` (which is a MaxMind license key), or you will need to provide an `MMDB_PATH` (a path to the `.mmdb` database file). Having both is not required.
+In order to start the app, you will need to add either a `LICENSE_KEY`, or an `MMDB_PATH` (a path to the `.mmdb` database file) within the `.env` file. Having both is not required.
+
+If provided, the `LICENSE_KEY` environment variable is a MaxMind license key, which can be created on MaxMind's website.
+
+If provided, the `MMDB_PATH` environment variable should be one of the following:
+ - A path relative to the **_./api_** directory (preferred)
+ - An absolute path, or
+ - A path relative to the **_root_** of the project
 
 > Note, if you plan to use docker you will need to provide the `LICENSE_KEY` in the `.env` file. This is because the docker image is built using the `LICENSE_KEY` environment variable. If you do not provide this, then the docker image will not be able to download the `.mmdb` file, and will fail to start. For more information on why this is setup this way, see the [Deployment Considerations](#deployment-considerations) section.
 
 ## Using Docker
-The easiest way to run this project is to use Docker. This project is configured to run using Docker Compose, so all you need to do is run the following command from the root of the project:
+The easiest way to run this project is to use Docker. This project is configured to run using Docker Compose, so all you need to do is run the following command from the **_root_** of the project:
 
 ```bash
 docker-compose up
@@ -62,15 +69,15 @@ brew install node
 
 ## Installing the dependencies
 In order to run the app, you will need to install the dependencies for both the API and the App. This can be done by running the following commands from the following directories: 
-- From the app directory:
+- From the **_./app_** directory:
   ```bash
   npm install
   ```
-- from the api directory (without a venv, not recommended if you are using Python for other projects):
+- from the **_./api_** directory (without a venv, not recommended if you are using Python for other projects):
   ```bash
   pip install -r requirements.txt
   ```
-- from the api directory (with a venv, recommended for development as it will not interfere with other Python projects):
+- from the **_./api_** directory (with a venv, recommended for development as it will not interfere with other Python projects):
   ```bash
     python -m venv venv
     source venv/bin/activate
@@ -81,12 +88,12 @@ In order to run the app, you will need to install the dependencies for both the 
 
 ## Running the app
 Once the dependencies are installed, you can run the API and App separately. This can be done by running the following commands from the following directories:
-- From the api directory:
+- API: From the **_./api_** directory:
   ```bash
   python -m flask --app app run -p 34343
   ```
   > Note, you may wish to use the `--debug` flag at the end of this command if you want to enable hot reloading. This is useful for development, but not recommended for production.
-- To run the App:
+- App: From the **_./app_** directory:
   ```bash
     npm start
     ```
@@ -95,19 +102,19 @@ Once the dependencies are installed, you can run the API and App separately. Thi
 
 # Testing
 ## Frontend
-The frontend tests use the [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/). These tests can be run by running the following command from the app directory:
+The frontend tests use the [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/). These tests can be run by running the following command from the **_./app_** directory:
 ```bash 
 npm run test
 ```
 
-Additionally, the frontend has been configured to use Storybook. This can be run by running the following command from the app directory:
+Additionally, the frontend has been configured to use Storybook. This can be run by running the following command from the **_./app_** directory:
 ```bash
 npm run storybook
 ```
 Storybook will open a browser window, and will allow you to view the components in isolation. This is useful for development, and can be used to test the components in a way that is not easy with the unit tests.
 
 ## Backend
-The backend tests use the [PyTest](https://docs.pytest.org/en/7.1.x/getting-started.html) framework. These tests can be run by running the following command from the api directory:
+The backend tests use the [PyTest](https://docs.pytest.org/en/7.1.x/getting-started.html) framework. These tests can be run by running the following command from the **_./api_** directory:
 ```bash
 pytest
 ```
@@ -206,7 +213,7 @@ Requirements derived from US-5:
 
 # Design
 ## API
-The API needs to be able to interface with a `.mmdb` file to retrieve the location data. In order to do this, a required license key, or path to the `.mmdb` file must be provided. On the first run, the API will download and save the most recent version of the `.mmdb` file in the root directory of the server. 
+The API needs to be able to interface with a `.mmdb` file to retrieve the location data. In order to do this, a required license key, or path to the `.mmdb` file must be provided. On the first run, the API will download and save the most recent version of the `.mmdb` file in the **_root_** directory of the server. 
 > Note, this is not a good practice, and in a real-world scenario, it would likely be better to store the IP information in a database, or host the `.mmdb` file in a separate file server. This implementation was chosen for simplicity and due to the fact that this project is not being deployed to a production environment. For more information on this, see the [deployment considerations](#deployment-considerations) section.
 
 Once the `.mmdb` file is accessible, a RESTful server will be created which will allow users to access the location data. This server will expose 3 endpoints:
