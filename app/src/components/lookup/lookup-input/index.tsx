@@ -116,6 +116,12 @@ export const LookupInput: React.FC<LookupInputProps> = ({
                 color='var(--text-color)'
                 size={24}
                 onClick={onRemove}
+                tabIndex={0}
+                onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                        onRemove();
+                    }
+                }}
             />
         </Wrapper>
     );

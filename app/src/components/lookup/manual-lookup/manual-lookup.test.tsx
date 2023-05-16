@@ -17,6 +17,53 @@ test('Search button is disabled when no IPs have been entered', () => {
     expect(searchButton).toBeDisabled();
 });
 
+test('Search button is enabled when a user starts typing an IP', () => {
+    const { container } = render(
+        <BrowserRouter>
+            <ManualLookup onLookup={mockOnLookup} />
+        </BrowserRouter>
+    );
+
+    const ipInput = container.querySelector('#new-ip') as HTMLInputElement;
+    act(() => {
+        fireEvent.change(ipInput, { target: { value: '1' } });
+    });
+
+    const searchButton = screen.getByText('Search');
+    expect(searchButton).toBeEnabled();
+});
+
+test('Search includes the IPs that have been previously entered and the one that is currently being entered', () => {
+    const { container } = render(
+        <BrowserRouter>
+            <ManualLookup onLookup={mockOnLookup} />
+        </BrowserRouter>
+    );
+
+    const ipInput = container.querySelector('#new-ip') as HTMLInputElement;
+    act(() => {
+        fireEvent.change(ipInput, { target: { value: '1.1.1.1' } });
+        fireEvent.keyDown(ipInput, { key: 'Enter' });
+        fireEvent.change(ipInput, { target: { value: '1.1.1.2' } });
+        fireEvent.keyDown(ipInput, { key: 'Enter' });
+        fireEvent.change(ipInput, { target: { value: '1.1.1.3' } });
+    });
+
+    const searchButton = screen.getByText('Search');
+    searchButton.click();
+
+    expect(mockOnLookup).toHaveBeenCalledWith([{
+        id: expect.any(String),
+        ip: '1.1.1.1',
+    }, {
+        id: expect.any(String),
+        ip: '1.1.1.2',
+    }, {
+        id: expect.any(String),
+        ip: '1.1.1.3',
+    }]);
+});
+
 test('Search button is disabled when only blank IPs have been entered', () => {
     const { container } = render(
         <BrowserRouter>

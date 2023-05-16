@@ -48,17 +48,39 @@ export const ManualLookup: React.FC<ManualLookupProps> = ({
     onLookup,
 }) => {
     const [ips, setIps] = React.useState<IpAddress[]>([]);
+    const [inFlightIp, setInFlightIp] = React.useState<IpAddress | null>(null);
 
-    const appendIp = React.useCallback((newIp: string) => {
+    const editInProgressIp = React.useCallback((newIp: string) => {
+        setInFlightIp(previousIp => {
+            if (!previousIp) {
+                return {
+                    id: uuidv4(),
+                    ip: newIp,
+                };
+            }
+
+            return {
+                ...previousIp,
+                ip: newIp,
+            };
+        });
+    }, [setInFlightIp]);
+
+    const appendIp = React.useCallback((newIp: IpAddress | null) => {
         setIps(previousIps => {
-            const ipAddress = {
-                id: uuidv4(), // Can't use index as it will change when we remove items.
-                ip: newIp.trim(),
+            const nextIp = newIp ?? {
+                id: uuidv4(),
+                ip: '',
             };
 
-            return [...previousIps, ipAddress];
+            return [...previousIps, nextIp];
         });
     }, [setIps]);
+
+    const appendInFlightIp = React.useCallback(() => {
+        appendIp(inFlightIp);
+        setInFlightIp(null);
+    }, [appendIp, inFlightIp, setInFlightIp]);
 
     const updateIp = React.useCallback((index: number, nextIp: string) => {
         setIps(previousIps => {
@@ -102,8 +124,10 @@ export const ManualLookup: React.FC<ManualLookupProps> = ({
     }, [setTag]);
 
     const filledIps = React.useMemo(() => {
-        return ips.filter(({ ip }) => ip !== '');
-    }, [ips]);
+        const createdIps = ips.filter(({ ip }) => ip !== '');
+
+        return [...createdIps, inFlightIp].filter(Boolean) as IpAddress[];
+    }, [ips, inFlightIp]);
 
     const duplicatesExist = React.useMemo(() => {
         const ipAddresses = filledIps.map(({ ip }) => ip);
@@ -146,18 +170,15 @@ export const ManualLookup: React.FC<ManualLookupProps> = ({
                     id='new-ip'
                     type="text"
                     placeholder='IP Address'
+                    value={inFlightIp?.ip ?? ''}
+                    onChange={e => {
+                        const element = e.target as HTMLInputElement;
+                        editInProgressIp(element.value);
+                    }}
                     pattern={ipRegex.source}
                     onKeyDown={e => {
-                        const element = e.target as HTMLInputElement;
-
                         if (e.key === 'Enter') {
-                            appendIp(element.value);
-
-                            // Set timeout to allow the input to clear
-                            // after the setIps call, otherwise it is possible
-                            // for the input to be cleared before the value
-                            // is added to the ips array.
-                            setTimeout(() => element.value = '');
+                            appendInFlightIp();
                         }
                     }}
                 />
@@ -165,10 +186,13 @@ export const ManualLookup: React.FC<ManualLookupProps> = ({
                     width={24}
                     color="var(--text-color)"
                     onClick={() => {
-                        const element = document.getElementById('new-ip') as HTMLInputElement;
-                        appendIp(element.value);
-
-                        setTimeout(() => element.value = '');
+                        appendInFlightIp();
+                    }}
+                    tabIndex={0}
+                    onKeyDown={e => {
+                        if (e.key === 'Enter') {
+                            appendInFlightIp();
+                        }
                     }}
                 />
             </div>
