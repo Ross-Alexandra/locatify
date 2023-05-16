@@ -1,6 +1,9 @@
 # VSCode config stuff
 .vscode/
 
+# Downloaded maxmind files
+maxmind-db/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
