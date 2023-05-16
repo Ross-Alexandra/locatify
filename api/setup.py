@@ -75,8 +75,13 @@ def get_mmdb_location():
         if os.path.exists(MMDB_PATH):
             return MMDB_PATH
 
-        elif os.path.join("..", MMDB_PATH):
+        # If it is relative to the root of the project
+        elif os.path.exists(os.path.join("..", MMDB_PATH)):
             return os.path.join("..", MMDB_PATH)
+
+        # If the path includes a ~
+        elif os.path.exists(os.path.expanduser(MMDB_PATH)):
+            return os.path.expanduser(MMDB_PATH)
 
         # Otherwise, if the license is set, then we can
         # fallback to downloading the file.
