@@ -1,0 +1,18 @@
+index:
+  path: /
+  controller: App\Controller\DefaultController::search
+
+search:
+  path: /search
+  controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController
+  defaults:
+    route: 'index'
+    permanent: true
+
+results:
+  path: /results
+  controller: App\Controller\DefaultController::results
+
+search_panel:
+  path: /search-panel
+  controller: App\Controller\HTMXController::searchPanel
