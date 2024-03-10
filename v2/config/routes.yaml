@@ -1,6 +1,6 @@
 index:
   path: /
-  controller: App\Controller\DefaultController::search
+  controller: App\Controller\HTMXController::search
 
 search:
   path: /search
@@ -11,8 +11,5 @@ search:
 
 results:
   path: /results
-  controller: App\Controller\DefaultController::results
+  controller: App\Controller\HTMXController::results
 
-search_panel:
-  path: /search-panel
-  controller: App\Controller\HTMXController::searchPanel

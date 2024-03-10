@@ -1,0 +1,20 @@
+<form hx-boost>
+    <h2>Bulk Lookup</h2>
+    <p>
+        Upload a file containing many IPs to search.
+    </p>
+
+    <input type="file" />
+    <a href="#">Download Sample</a>
+
+    <div class="actions">
+        <button class="search-type-swap secondary" data-swap-to="manual">
+            {% include 'icons/manual.html.twig' with { 'size': '24' } %}
+            Manual
+        </button>
+        <button type="submit">
+            {% include 'icons/search.html.twig' with { 'size': '24' } %}
+            Search
+        </button>
+    </div>
+</form>

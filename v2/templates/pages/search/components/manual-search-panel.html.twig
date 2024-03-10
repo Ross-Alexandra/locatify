@@ -1,0 +1,56 @@
+<form
+    hx-get="/results"
+    hx-trigger="submit"
+    hx-target="main"
+    hx-swap="innerHTML"
+    hx-on:no-groups-remaining="htmxFormDisableSubmitButton(this)"
+    hx-on:group-added="htmxFormEnableSubmitButton(this)"
+>
+    <h2>IP Lookup</h2>
+    <p>
+        Manually enter IP addresses, or use bulk lookup to upload a file of IP
+        addresses.
+    </p>
+    <x-input-groups
+        class="ip-groups"
+        data-group-selector=".ip-group"
+        data-add-button-selector="#add-ip"
+        data-remove-group-selector=".remove-ip"
+    >
+        <div class="ip-group">
+            <input
+                name="ip[0][ip]"
+                type="text"
+                placeholder="IP address"
+                onkeydown="if(event.key === 'Enter') { event.preventDefault(); }"
+                oninvalid="onIpInputInvalid(this)"
+                oninput="resetIpValidity(this)"
+                required
+            />
+            <input
+                name="ip[0][label]"
+                type="text"
+                placeholder="Label"
+                onkeydown="if(event.key === 'Enter') { event.preventDefault(); }"
+            />
+            <button class="remove-ip icon" aria-label="Remove">
+                {% include 'icons/remove.html.twig' with { 'size': '24' } %}
+            </button>
+        </div>
+    </x-input-groups>
+
+    <button id="add-ip" class="icon" aria-label="Add New">
+        {% include 'icons/new-item.html.twig' with { 'size': '24' } %}
+    </button>
+
+    <div class="actions">
+        <button class="search-type-swap secondary" data-swap-to="bulk">
+            {% include 'icons/bulk.html.twig' with { 'size': '24' } %}
+            Bulk
+        </button>
+        <button type="submit">
+            {% include 'icons/search.html.twig' with { 'size': '24' } %}
+            Search
+        </button>
+    </div>
+</form>
