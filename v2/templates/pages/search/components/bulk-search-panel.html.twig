@@ -1,11 +1,40 @@
-<form hx-boost>
-    <h2>Bulk Lookup</h2>
+<form class="bulk-search">
+    <h3>Bulk Lookup</h3>
     <p>
         Upload a file containing many IPs to search.
     </p>
 
-    <input type="file" />
-    <a href="#">Download Sample</a>
+    <div class='file-uploader' aria-role="button" aria-label="File Upload">
+        <input type="file" />
+
+        <h4>Drag &amp; Drop</h4>
+        {% include 'icons/file-upload.html.twig' with { 'size': '48' } %}
+    </div>
+
+    <a href="{{ absolute_url(asset('example.csv')) }}">Download Sample</a>
+
+    <div id='ip-table'>
+        <table>
+            <thead>
+                <tr>
+                    <th>IP</th>
+                    <th>Label</th>
+                </tr>
+            </thead>
+            <tbody>
+                <template>
+                    <tr>
+                        <td>
+                            <input type="text" name="ip[0][ip]" readonly value="" />
+                        </td>
+                        <td>
+                            <input type="text" name="ip[0][label]" readonly value="" />
+                        </td>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+    </div>
 
     <div class="actions">
         <button class="search-type-swap secondary" data-swap-to="manual">

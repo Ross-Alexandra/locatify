@@ -3,20 +3,15 @@
     hx-trigger="submit"
     hx-target="main"
     hx-swap="innerHTML"
-    hx-on:no-groups-remaining="htmxFormDisableSubmitButton(this)"
-    hx-on:group-added="htmxFormEnableSubmitButton(this)"
+    hx-on:input-groups-empty="htmx.find('button[type=submit]').disabled = true"
+    hx-on:input-groups-not-empty="htmx.find('button[type=submit]').disabled = false"
 >
-    <h2>IP Lookup</h2>
+    <h3>IP Lookup</h3>
     <p>
         Manually enter IP addresses, or use bulk lookup to upload a file of IP
         addresses.
     </p>
-    <x-input-groups
-        class="ip-groups"
-        data-group-selector=".ip-group"
-        data-add-button-selector="#add-ip"
-        data-remove-group-selector=".remove-ip"
-    >
+    <x-input-groups class="ip-groups">
         <div class="ip-group">
             <input
                 name="ip[0][ip]"
@@ -33,13 +28,23 @@
                 placeholder="Label"
                 onkeydown="if(event.key === 'Enter') { event.preventDefault(); }"
             />
-            <button class="remove-ip icon" aria-label="Remove">
+            <button
+                class="remove-ip icon"
+                aria-label="Remove"
+                type="button"
+                onclick="htmx.trigger('x-input-groups.ip-groups', 'input-groups-remove-group', this.closest('.ip-group'))"
+            >
                 {% include 'icons/remove.html.twig' with { 'size': '24' } %}
             </button>
         </div>
     </x-input-groups>
 
-    <button id="add-ip" class="icon" aria-label="Add New">
+    <button
+        class="add-ip icon"
+        type="button"
+        aria-label="Add New"
+        hx-on:click="htmx.trigger('x-input-groups.ip-groups', 'input-groups-add-group')"
+    >
         {% include 'icons/new-item.html.twig' with { 'size': '24' } %}
     </button>
 

@@ -11,60 +11,72 @@ function setInputGroupIndex(input, index) {
  * The original input group should match the structure of the rest of the
  * input groups.
  * 
- * @attr data-group-selector - The selector for the input group
- * @attr data-add-button-selector - The selector for the button that will add new input groups
- * @attr data-remove-group-selector - The selector for the button that will remove the input group
- */
+ * @listens input-groups-remove-group - Removes the input group provided in the event detail from the component.
+ * @listens input-groups-add-group - Adds a new input group to the component. If the event detail is a list, each
+ * item in the list will be applied as the value for the input in the new group matching the index.
+*/
 class InputGroups extends HTMLElement {
-    removeInputGroup(groupToRemove) {
-        groupToRemove.remove();
-    
-        // Update the input names for the remaining groups
-        const inputGroups = this.querySelectorAll(this.getAttribute('data-group-selector'));
-        inputGroups.forEach((group, index) => {
-            group.querySelectorAll('input').forEach(input => setInputGroupIndex(input, index));
-        });
+    constructor() {
+        super();
 
-        if (inputGroups.length === 0) {
-            this.dispatchEvent(new Event('no-groups-remaining', { bubbles: true }));
-        }
+        this.addEventListener('input-groups-add-group', e => {
+            const groupsToAdd = this.shadowGroupCopy.querySelectorAll('input[name]').length;
+            const values = e.detail instanceof Array ? e.detail : [];
+
+            if (values.length === groupsToAdd || values.length === 0) {
+                this.addInputGroup(values);
+            } else {
+                throw new Error('The number of values provided does not match the number of inputs in the group');
+            }
+        });
+        
+        this.addEventListener('input-groups-remove-group', e => {
+            this.removeInputGroup(e.detail);
+        });
     }
 
     connectedCallback() {
         requestAnimationFrame(() => {
-            this.addGroupButton = document.querySelector(this.getAttribute('data-add-button-selector'));
-            this.removeGroupSelector = this.getAttribute('data-remove-group-selector');
-            this.shadowGroupCopy = this.querySelector(this.getAttribute('data-group-selector')).cloneNode(true);
+            this.shadowGroupCopy = this.querySelector('& > *').cloneNode(true);
             this.shadowGroupCopy.querySelectorAll('input').forEach(input => input.value = '');
-
-            // Set up a listener for the original remove button
-            const originalGroup = this.querySelector(this.getAttribute('data-group-selector'));
-            this.querySelector(this.removeGroupSelector)?.addEventListener('click', e => {
-                e.preventDefault();
-                this.removeInputGroup(originalGroup);
-            });
-    
-            this.addGroupButton?.addEventListener('click', e => {
-                e.preventDefault();
-                const newGroup = this.shadowGroupCopy.cloneNode(true);
-
-                // Setup the remove button for the new group
-                newGroup.querySelector(this.removeGroupSelector).addEventListener('click', e => {
-                    e.preventDefault();
-                    this.removeInputGroup(newGroup);
-                });
-
-                // Setup the input names for the new group
-                const totalGroups = this.querySelectorAll(this.getAttribute('data-group-selector')).length;
-                newGroup.querySelectorAll('input').forEach(input => setInputGroupIndex(input, totalGroups));
-
-                this.appendChild(newGroup);
-
-                if (totalGroups === 0) {
-                    this.dispatchEvent(new Event('group-added', { bubbles: true }));
-                }
-            });
         });
+    }
+
+    removeInputGroup(groupToRemove) {
+        groupToRemove.remove();
+    
+        // Update the input names for the remaining groups
+        const inputGroups = this.querySelectorAll('& > *');
+        inputGroups.forEach((group, index) => {
+            group.querySelectorAll('input').forEach(input => setInputGroupIndex(input, index));
+        });
+
+        console.log(inputGroups.length);
+        if (inputGroups.length === 0) {
+            this.dispatchEvent(new CustomEvent('input-groups-empty', { bubbles: true }));
+        }
+    }
+
+    /**
+     * Adds a new input group to the component
+     * 
+     * @param  {...string} values 
+     */
+    addInputGroup(...values) {
+        const newGroup = this.shadowGroupCopy.cloneNode(true);
+
+        // Setup the input names for the new group
+        const totalGroups = this.querySelectorAll('& > *').length;
+        newGroup.querySelectorAll('input').forEach((input, index) => {
+            setInputGroupIndex(input, totalGroups)
+            input.value = values[index] || '';
+        });
+
+        this.appendChild(newGroup);
+
+        if (totalGroups === 0) {
+            this.dispatchEvent(new CustomEvent('input-groups-not-empty', { bubbles: true }));
+        }
     }
 }
 

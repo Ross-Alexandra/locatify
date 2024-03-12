@@ -12,14 +12,6 @@ window.addEventListener('load' , () => {
     });
 });
 
-function htmxFormDisableSubmitButton(form) {
-    form.querySelector("button[type='submit']").disabled = true;
-}
-
-function htmxFormEnableSubmitButton(form) {
-    form.querySelector("button[type='submit']").disabled = false;
-}
-
 function onIpInputInvalid(input) {
     input.setCustomValidity('Please enter a valid IP address')
 }

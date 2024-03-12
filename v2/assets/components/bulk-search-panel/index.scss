@@ -1,0 +1,47 @@
+form.bulk-search {
+    display: flex;
+    flex-direction: column;
+}
+
+.file-uploader {
+    align-self: start;
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    border: 1px dashed var(--border-color);
+    border-radius: var(--border-radius-small);
+    padding: 15px;
+    margin-top: 10px;
+
+    & > input[type="file"] {
+        position: absolute;
+        opacity: 0;
+    
+        inset: 0;
+        width: 100%;
+        height: 100%;
+    
+        z-index: 100;
+    
+        cursor: pointer;
+    }
+
+    &:focus-within:after {
+        position: absolute;
+        inset: 0px;
+        content: '';
+
+        outline: 3px solid var(--primary-color);
+
+    }
+}
+
+.actions {
+    margin-top: 10px;
+}
