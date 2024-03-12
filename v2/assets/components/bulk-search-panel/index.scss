@@ -42,6 +42,37 @@ form.bulk-search {
     }
 }
 
+.csv-sample {
+    align-self: start;
+}
+
+.ip-table[data-visible="false"] {
+    display: none;
+}
+
+.input-row {
+    display: grid;
+    grid-template-columns: minmax(0px, 1fr) minmax(0px, 1fr);
+    align-items: center;
+    justify-content: start;
+    gap: 10px;
+
+    width: 100%;
+
+    border-bottom: 1px solid var(--border-color);
+    padding: 5px 15px;
+}
+
+input[readonly] {
+    background-color: unset;
+    border: unset;
+    padding: unset;
+
+    color: var(--text-color);
+    font-family: var(--primary-font);
+    font-size: var(--primary-body-font-size);
+}
+
 .actions {
     margin-top: 10px;
 }

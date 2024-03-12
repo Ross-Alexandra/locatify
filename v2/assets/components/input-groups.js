@@ -11,6 +11,8 @@ function setInputGroupIndex(input, index) {
  * The original input group should match the structure of the rest of the
  * input groups.
  * 
+ * @attr default-empty - If provided, the component will remove the original input group when the component is connected.
+ * 
  * @listens input-groups-remove-group - Removes the input group provided in the event detail from the component.
  * @listens input-groups-add-group - Adds a new input group to the component. If the event detail is a list, each
  * item in the list will be applied as the value for the input in the new group matching the index.
@@ -33,12 +35,18 @@ class InputGroups extends HTMLElement {
         this.addEventListener('input-groups-remove-group', e => {
             this.removeInputGroup(e.detail);
         });
+
     }
 
     connectedCallback() {
         requestAnimationFrame(() => {
-            this.shadowGroupCopy = this.querySelector('& > *').cloneNode(true);
+            const originalRoot = this.querySelector('& > *');
+            this.shadowGroupCopy = originalRoot.cloneNode(true);
             this.shadowGroupCopy.querySelectorAll('input').forEach(input => input.value = '');
+
+            if (this.hasAttribute('default-empty')) {
+                originalRoot.remove();
+            }
         });
     }
 

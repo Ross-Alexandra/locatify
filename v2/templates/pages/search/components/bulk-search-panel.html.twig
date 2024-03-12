@@ -1,4 +1,12 @@
-<form class="bulk-search">
+<form
+    class="bulk-search"
+    hx-get="/results"
+    hx-trigger="submit"
+    hx-target="main"
+    hx-swap="innerHTML"
+    hx-on:input-groups-empty="htmx.find('.ip-table').setAttribute('data-visible', 'false')"
+    hx-on:input-groups-not-empty="htmx.find('.ip-table').setAttribute('data-visible', 'true')"    
+>
     <h3>Bulk Lookup</h3>
     <p>
         Upload a file containing many IPs to search.
@@ -11,29 +19,19 @@
         {% include 'icons/file-upload.html.twig' with { 'size': '48' } %}
     </div>
 
-    <a href="{{ absolute_url(asset('example.csv')) }}">Download Sample</a>
+    <a class="csv-sample" href="{{ absolute_url(asset('example.csv')) }}">Download Sample</a>
 
-    <div id='ip-table'>
-        <table>
-            <thead>
-                <tr>
-                    <th>IP</th>
-                    <th>Label</th>
-                </tr>
-            </thead>
-            <tbody>
-                <template>
-                    <tr>
-                        <td>
-                            <input type="text" name="ip[0][ip]" readonly value="" />
-                        </td>
-                        <td>
-                            <input type="text" name="ip[0][label]" readonly value="" />
-                        </td>
-                    </tr>
-                </template>
-            </tbody>
-        </table>
+    <div class='ip-table' data-visible="false">
+        <div class='input-row header'>
+            <h4>IP</h4>
+            <h4>Label</h4>
+        </div>
+        <x-input-groups default-empty>
+            <div class='input-row'>
+                <input type="text" name="ip[0][ip]" readonly value="" />
+                <input type="text" name="ip[0][label]" readonly value="" />
+            </div>
+        </x-input-groups>
     </div>
 
     <div class="actions">

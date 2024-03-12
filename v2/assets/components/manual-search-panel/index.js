@@ -13,7 +13,7 @@ window.addEventListener('load' , () => {
 });
 
 function onIpInputInvalid(input) {
-    input.setCustomValidity('Please enter a valid IP address')
+    input.setCustomValidity('Please enter a valid IP address');
 }
 
 function resetIpValidity(input) {
