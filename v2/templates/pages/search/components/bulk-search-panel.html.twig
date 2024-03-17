@@ -3,9 +3,7 @@
     hx-get="/results"
     hx-trigger="submit"
     hx-target="main"
-    hx-swap="innerHTML"
-    hx-on:input-groups-empty="htmx.find('.ip-table').setAttribute('data-visible', 'false')"
-    hx-on:input-groups-not-empty="htmx.find('.ip-table').setAttribute('data-visible', 'true')"    
+    hx-swap="innerHTML"    
 >
     <h3>Bulk Lookup</h3>
     <p>
@@ -13,7 +11,7 @@
     </p>
 
     <div class='file-uploader' aria-role="button" aria-label="File Upload">
-        <input type="file" />
+        <input type="file" onchange="onUploadCSV(this)" />
 
         <h4>Drag &amp; Drop</h4>
         {% include 'icons/file-upload.html.twig' with { 'size': '48' } %}
@@ -39,7 +37,7 @@
             {% include 'icons/manual.html.twig' with { 'size': '24' } %}
             Manual
         </button>
-        <button type="submit">
+        <button type="submit" disabled>
             {% include 'icons/search.html.twig' with { 'size': '24' } %}
             Search
         </button>

@@ -26,7 +26,7 @@ class InputGroups extends HTMLElement {
             const values = e.detail instanceof Array ? e.detail : [];
 
             if (values.length === groupsToAdd || values.length === 0) {
-                this.addInputGroup(values);
+                this.addInputGroup(...values);
             } else {
                 throw new Error('The number of values provided does not match the number of inputs in the group');
             }
@@ -75,9 +75,12 @@ class InputGroups extends HTMLElement {
 
         // Setup the input names for the new group
         const totalGroups = this.querySelectorAll('& > *').length;
+
+        console.log('new input group');
         newGroup.querySelectorAll('input').forEach((input, index) => {
             setInputGroupIndex(input, totalGroups)
             input.value = values[index] || '';
+            console.log('Setting input value', index, values[index])
         });
 
         this.appendChild(newGroup);
