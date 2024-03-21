@@ -1,17 +1,36 @@
 <div class="results-container">
     {% for item in ipInfo %}
         <div class="result">
-            {% if item['label'] %}
-                <h4>{{ item['label']}} ({{ item['ip'] }})</h2>
+            {% if item['data']['mapLink'] %}
+                <iframe
+                    title='Google Maps'
+                    src={{ item['data']['mapLink']}}
+                ></iframe>
             {% else %}
-                <h4>{{ item['ip'] }}</h4>
+                <h2>No map available</h2>
             {% endif %}
-            <p>City: {{ item['data']['city'] }}, {{ item['data']['country']}}</p>
-            <p>Postal Code: {{ item['data']['postalCode'] }}</p>
-            <p>Latitude: {{ item['data']['latitude'] }}</p>
-            <p>Longitude: {{ item['data']['longitude'] }}</p>
-            <p>Timezone: {{ item['data']['timezone'] }}</p>
-            <p>Accuracy: {{ item['data']['accuracy'] }}</p>   
+
+            {% if item['label'] %}
+                <h3>{{ item['label']}} ({{ item['ip'] }})</h2>
+            {% else %}
+                <h3>{{ item['ip'] }}</h4>
+            {% endif %}
+            <div>
+                {% include 'icons/location.html.twig' with { 'size': '20', 'title': 'Location' } %}
+                <h4>{{ item['data']['city'] }}, {{ item['data']['country']}}</h4>
+            </div>
+            <div>
+                {% include 'icons/postal-code.html.twig' with { 'size': '20', 'title': 'Postal Code' } %}
+                <p>{{ item['data']['postalCode'] }}</p>
+            </div>
+            <div>
+                {% include 'icons/accuracy.html.twig' with { 'size': '20', 'title': 'Accuracy' } %}
+                <p>{{ item['data']['accuracy'] }}km</p>   
+            </div>
+            <div>
+                {% include 'icons/clock.html.twig' with { 'size': '20', 'title': 'Local Time' } %}
+                <p>{{ item['data']['time'] }}</p>
+            </div>
         </div>
     {% endfor %}
 </div>
