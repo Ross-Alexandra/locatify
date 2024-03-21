@@ -129,5 +129,5 @@ function parse_maps_link($ipData, $API_KEY) {
     $lat = $ipData['location']['latitude'];
     $long = $ipData['location']['longitude'];
 
-    return "http://www.google.com/maps/embed/v1/place?key=$API_KEY&q=$lat,$long&center=$lat,$long&zoom=12&maptype=roadmap";
+    return "https://maps.google.com/maps?output=embed&q=$lat,$long";
 }
