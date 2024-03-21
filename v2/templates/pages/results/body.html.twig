@@ -1,3 +1,17 @@
 <div class="results-container">
-    <h1>Results!</h1>
+    {% for item in ipInfo %}
+        <div class="result">
+            {% if item['label'] %}
+                <h4>{{ item['label']}} ({{ item['ip'] }})</h2>
+            {% else %}
+                <h4>{{ item['ip'] }}</h4>
+            {% endif %}
+            <p>City: {{ item['data']['city'] }}, {{ item['data']['country']}}</p>
+            <p>Postal Code: {{ item['data']['postalCode'] }}</p>
+            <p>Latitude: {{ item['data']['latitude'] }}</p>
+            <p>Longitude: {{ item['data']['longitude'] }}</p>
+            <p>Timezone: {{ item['data']['timezone'] }}</p>
+            <p>Accuracy: {{ item['data']['accuracy'] }}</p>   
+        </div>
+    {% endfor %}
 </div>

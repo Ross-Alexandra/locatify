@@ -12,4 +12,3 @@ search:
 results:
   path: /results
   controller: App\Controller\HTMXController::results
-
