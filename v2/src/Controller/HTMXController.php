@@ -55,7 +55,7 @@ class HTMXController extends AbstractController {
                     'longitude' => parse_longitude($ipData),
                     'accuracy' => parse_accuracy($ipData),
                     'time' => parse_time($ipData),
-                    'mapLink' => parse_maps_link($ipData, $this->getParameter('app.maps_embed_api_key')),
+                    'mapLink' => parse_maps_link($ipData),
                 ],
                 'label' => $lookup['label'],
                 'ip' => $lookup['ip'],
@@ -117,7 +117,7 @@ function parse_time($ipData) {
     return $date->format('h:i a e(P)');
 }
 
-function parse_maps_link($ipData, $API_KEY) {
+function parse_maps_link($ipData) {
     if (
         !array_key_exists('location', $ipData)
         || !array_key_exists('latitude', $ipData['location'])
