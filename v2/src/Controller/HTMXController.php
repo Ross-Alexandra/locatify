@@ -28,23 +28,16 @@ class HTMXController extends AbstractController {
         return $this->htmxRenderPage($request, 'pages/search');
     }
 
-    public function results(Request $request, LoggerInterface $logger) {
+    public function results(Request $request) {
         $home = getenv('HOME');
         $locatifyDirectory = "$home/locatify";
         $reader = new Reader("$home/locatify/database.mmdb");
 
         $ipsToLookup = $request->get('ip');
-        $logger->info('ipsToLookUp: {ips}', [
-            'ips' => print_r($ipsToLookup, true),
-        ]);
         $ipInfo = [];
 
         foreach($ipsToLookup as $lookup) {
             $ipData = $reader->get($lookup['ip']) ?? [];
-
-            $logger->info('ipData: {data}', [
-                'data' => print_r($ipData, true)
-            ]);
 
             array_push($ipInfo, [
                 'data' => [
