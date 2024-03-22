@@ -21,7 +21,6 @@ class Deploy extends Command {
         parent::__construct();
     }
 
-    // This is an italic comment
     protected function execute(InputInterface $input, OutputInterface $output): int {
         $projectRoot = dirname(dirname(dirname(__FILE__)));
 
