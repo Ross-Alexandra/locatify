@@ -49,7 +49,11 @@
     </button>
 
     <div class="actions">
-        <button class="search-type-swap secondary" data-swap-to="bulk">
+        <button
+            class="search-type-swap secondary"
+            type="button"
+            hx-on:click="htmx.trigger('#search-panel', 'search-type-swap', { searchType: 'bulk' })"
+        >
             {% include 'icons/bulk.html.twig' with { 'size': '24' } %}
             Bulk
         </button>

@@ -1,5 +1,9 @@
 <div class="search-container">
-    <div id="search-panel" data-search-type="manual">
+    <div
+        id="search-panel"
+        data-search-type="manual"
+        hx-on:search-type-swap="this.setAttribute('data-search-type', event.detail.searchType)"
+    >
         <div class="manual-search-panel">
             {% include 'pages/search/components/manual-search-panel.html.twig' %}
         </div>

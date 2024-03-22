@@ -33,7 +33,11 @@
     </div>
 
     <div class="actions">
-        <button class="search-type-swap secondary" data-swap-to="manual">
+        <button
+            class="search-type-swap secondary"
+            type="button"
+            hx-on:click="htmx.trigger('#search-panel', 'search-type-swap', { searchType: 'manual' })"
+        >
             {% include 'icons/manual.html.twig' with { 'size': '24' } %}
             Manual
         </button>

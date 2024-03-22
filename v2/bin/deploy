@@ -51,6 +51,9 @@ rsync \
     --exclude='.vscode/' \
     $(pwd)/ locatify:locatify/server;
 
+# Remove the generated .env.local.php file from the local file system
+rm .env.local.php;
+
 # Generate the production .env file
 ssh locatify 'cd ~/locatify/server; composer install --no-dev;';
 
