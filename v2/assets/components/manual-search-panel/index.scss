@@ -1,0 +1,44 @@
+.ip-group {
+    display: contents;
+}
+
+button.remove-ip,
+.add-ip {
+    padding-inline: 0px;
+}
+
+.ip-groups {
+    display: grid;
+    grid-template-columns: minmax(0px, 1fr) minmax(0px, 1fr) 24px;
+    gap: 10px;
+    width: 100%;
+    align-items: center;
+
+    margin-block: 10px;
+    padding-right: 10px;
+
+    max-height: 50svh;
+    overflow-y: auto;
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--layer-color) var(--layer-color);
+
+    &::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: var(--layer-color);
+    }
+}
+
+.actions {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+
+    width: 100%;
+
+    align-items: center;
+    justify-content: end;
+}

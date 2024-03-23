@@ -1,0 +1,11 @@
+index:
+  path: /
+  controller: App\Controller\HTMXController::index
+
+search:
+  path: /search
+  controller: App\Controller\HTMXController::search
+
+results:
+  path: /results
+  controller: App\Controller\HTMXController::results

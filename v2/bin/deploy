@@ -1,0 +1,77 @@
+#! /bin/bash
+# Verify that we're running from the project root
+if [ ! -f bin/deploy ]; then
+    echo "Please run this script from the project root."
+    exit 1
+fi
+
+# Verify that the `locatify` ssh Host has been set
+if ssh -q locatify exit; then
+    echo "Deploying to locatify..."
+else
+    echo "Please add the following to your ~/.ssh/config file:"
+    echo "Host locatify"
+    echo "    HostName <deployment-server-ip>"
+    echo "    User <deployment-user>"
+    echo "    IdentityFile <path-to-private-key>"
+    exit 1
+fi
+
+# Verify that the deployment server has rsync installed
+if ssh locatify 'command -v rsync' > /dev/null; then
+    echo "rsync found on deployment server."
+else
+    echo "Please install rsync on the deployment server."
+    exit 1
+fi
+
+# Verify that a local .env file exists
+if [ ! -f .env ]; then
+    echo "No .env file found. Please create one."
+    exit 1
+fi
+
+# Dump production environment variables
+composer dump-env prod;
+
+# Copy the production files to the deployment server
+ssh locatify 'mkdir -p ~/locatify/server';
+rsync \
+    -av \
+    -e ssh \
+    --exclude='.env' \
+    --exclude='.env.local' \
+    --exclude='.env.*.local' \
+    --exclude='.symfony.local.yaml' \
+    --exclude='.gitignore' \
+    --exclude='config/secrets/prod/prod.decrypt.private.php' \
+    --exclude='public/bundles/' \
+    --exclude='var/' \
+    --exclude='vendor/' \
+    --exclude='.vscode/' \
+    $(pwd)/ locatify:locatify/server;
+
+# Remove the generated .env.local.php file from the local file system
+rm .env.local.php;
+
+# Generate the production .env file
+ssh locatify 'cd ~/locatify/server; composer install --no-dev;';
+
+# Clear the production cache & warm it up
+ssh locatify 'cd ~/locatify/server; APP_ENV=prod APP_DEBUG=0 php bin/console cache:clear';
+
+# Setup the cron jobs needed for this server:
+#  - download the latest MaxMind DB file every day with the app:download-mmdb-file command
+ssh locatify 'cd ~/locatify/server; crontab -r ; crontab -l | { cat; echo "0 0 * * * APP_ENV=prod APP_DEBUG=0 php bin/console app:download-mmdb-file"; } | crontab -';
+
+# Build the production assets
+#  - SASS files
+#  - Asset manifest
+ssh locatify 'cd ~/locatify/server; php bin/console sass:build';
+ssh locatify 'cd ~/locatify/server; bin/console asset-map:compile';
+
+# Run the production server
+ssh locatify 'cd ~/locatify/server; symfony server:stop ;APP_ENV=prod APP_DEBUG=0 symfony server:start -d --port=14000;';
+
+# Manually download the MaxMind DB file
+ssh locatify 'cd ~/locatify/server; APP_ENV=prod APP_DEBUG=0 php bin/console app:download-mmdb-file';

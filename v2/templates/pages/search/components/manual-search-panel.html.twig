@@ -1,0 +1,65 @@
+<form
+    hx-get="/results"
+    hx-trigger="submit"
+    hx-target="main"
+    hx-swap="innerHTML"
+    hx-on:input-groups-empty="htmx.find('button[type=submit]').disabled = true"
+    hx-on:input-groups-not-empty="htmx.find('button[type=submit]').disabled = false"
+>
+    <h3>IP Lookup</h3>
+    <p>
+        Manually enter IP addresses, or use bulk lookup to upload a file of IP
+        addresses.
+    </p>
+    <x-input-groups class="ip-groups">
+        <div class="ip-group">
+            <input
+                name="ip[0][ip]"
+                type="text"
+                placeholder="IP address"
+                onkeydown="if(event.key === 'Enter') { event.preventDefault(); }"
+                oninvalid="onIpInputInvalid(this)"
+                oninput="resetIpValidity(this)"
+                required
+            />
+            <input
+                name="ip[0][label]"
+                type="text"
+                placeholder="Label"
+                onkeydown="if(event.key === 'Enter') { event.preventDefault(); }"
+            />
+            <button
+                class="remove-ip icon"
+                aria-label="Remove"
+                type="button"
+                onclick="htmx.trigger('x-input-groups.ip-groups', 'input-groups-remove-group', this.closest('.ip-group'))"
+            >
+                {% include 'icons/remove.html.twig' with { 'size': '24' } %}
+            </button>
+        </div>
+    </x-input-groups>
+
+    <button
+        class="add-ip icon"
+        type="button"
+        aria-label="Add New"
+        hx-on:click="htmx.trigger('x-input-groups.ip-groups', 'input-groups-add-group')"
+    >
+        {% include 'icons/new-item.html.twig' with { 'size': '24' } %}
+    </button>
+
+    <div class="actions">
+        <button
+            class="search-type-swap secondary"
+            type="button"
+            hx-on:click="htmx.trigger('#search-panel', 'search-type-swap', { searchType: 'bulk' })"
+        >
+            {% include 'icons/bulk.html.twig' with { 'size': '24' } %}
+            Bulk
+        </button>
+        <button type="submit">
+            {% include 'icons/search.html.twig' with { 'size': '24' } %}
+            Search
+        </button>
+    </div>
+</form>

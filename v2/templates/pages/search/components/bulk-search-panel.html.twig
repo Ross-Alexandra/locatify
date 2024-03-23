@@ -1,0 +1,49 @@
+<form
+    class="bulk-search"
+    hx-get="/results"
+    hx-trigger="submit"
+    hx-target="main"
+    hx-swap="innerHTML"    
+>
+    <h3>Bulk Lookup</h3>
+    <p>
+        Upload a file containing many IPs to search.
+    </p>
+
+    <div class='file-uploader' aria-role="button" aria-label="File Upload">
+        <input type="file" onchange="onUploadCSV(this)" />
+
+        <h4>Drag &amp; Drop</h4>
+        {% include 'icons/file-upload.html.twig' with { 'size': '48' } %}
+    </div>
+
+    <a class="csv-sample" href="{{ absolute_url(asset('example.csv')) }}">Download Sample</a>
+
+    <div class='ip-table' data-visible="false">
+        <div class='input-row header'>
+            <h4>IP</h4>
+            <h4>Label</h4>
+        </div>
+        <x-input-groups default-empty>
+            <div class='input-row'>
+                <input type="text" name="ip[0][ip]" readonly value="" />
+                <input type="text" name="ip[0][label]" readonly value="" />
+            </div>
+        </x-input-groups>
+    </div>
+
+    <div class="actions">
+        <button
+            class="search-type-swap secondary"
+            type="button"
+            hx-on:click="htmx.trigger('#search-panel', 'search-type-swap', { searchType: 'manual' })"
+        >
+            {% include 'icons/manual.html.twig' with { 'size': '24' } %}
+            Manual
+        </button>
+        <button type="submit" disabled>
+            {% include 'icons/search.html.twig' with { 'size': '24' } %}
+            Search
+        </button>
+    </div>
+</form>
