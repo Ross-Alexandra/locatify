@@ -24,6 +24,10 @@ class HTMXController extends AbstractController {
         }
     }
     
+    public function index(Request $request) {
+        return $this->render("pages/search/index.html.twig");
+    }
+
     public function search(Request $request) {
         return $this->htmxRenderPage($request, 'pages/search');
     }
