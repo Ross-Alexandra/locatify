@@ -28,14 +28,9 @@ function onUploadCSV(input) {
             }));
         });
 
-        enableUI(form);
+        form.querySelector('button[type="submit"]').removeAttribute('disabled');
+        form.querySelector('.ip-table').setAttribute('data-visible', 'true');
     }
 
     reader.readAsText(file);
 }
-
-function enableUI(form) {
-    form.querySelector('button[type="submit"]').removeAttribute('disabled');
-    form.querySelector('.ip-table').setAttribute('data-visible', 'true');
-}
-

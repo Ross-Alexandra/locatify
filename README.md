@@ -12,17 +12,12 @@ learn more about php & twig (as this is the stack we use at my current company).
 In the future I'd like to try out a similar project using Go and the html/template
 package.
 
+See my thoughts on this approach [on my blog](https://blog.rossalexandra.com/blogs/building-an-ip-lookup-tool-with-htmx-and-symfony/)
+
 ## V3
 A rewrite of the locatify app using Go and the html/template package. I'm using
 this as an opportunity to learn more about Go and to compare it to the php/twig
-stack.
-
-Since the app written in v2 uses HTMX & twig templates, I'm going to minimally
-rewrite the templates to use the html/template package. Further, since the
-app written in v2 uses the methodology of having the server be the source of
-truth for the UI, I expect to be able to reuse the templates with minimal
-modification. 
-
-V3 will allow me to test this hypothesis and to compare the two stacks, while
-also learning more about Go.
+stack. For the frontend, I'm going to be adding Alpine.js & HTMX to the mix to help
+with the interactivity on parts of the app without needing to bring in a full
+frontend framework like React or Vue.
 

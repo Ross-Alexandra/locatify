@@ -59,7 +59,6 @@ class InputGroups extends HTMLElement {
             group.querySelectorAll('input').forEach(input => setInputGroupIndex(input, index));
         });
 
-        console.log(inputGroups.length);
         if (inputGroups.length === 0) {
             this.dispatchEvent(new CustomEvent('input-groups-empty', { bubbles: true }));
         }
@@ -76,11 +75,9 @@ class InputGroups extends HTMLElement {
         // Setup the input names for the new group
         const totalGroups = this.querySelectorAll('& > *').length;
 
-        console.log('new input group');
         newGroup.querySelectorAll('input').forEach((input, index) => {
             setInputGroupIndex(input, totalGroups)
             input.value = values[index] || '';
-            console.log('Setting input value', index, values[index])
         });
 
         this.appendChild(newGroup);
