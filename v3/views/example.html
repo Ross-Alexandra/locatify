@@ -1,14 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            {{ or .value "Locatify - IP Lookup" }}
+        </title>
 
-    <link href="static/base.css" rel="stylesheet"/>
-    <script src="static/bundle.js"></script>
-</head>
-<body>
-    <h1>This is an app!</h1>
-</body>
+        <meta charset="UTF-8" />
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+        <meta name="msapplication-TileColor" content="#b91d47">
+        <meta name="theme-color" content="#ffffff">
+        <link rel="manifest" href="/site.webmanifest">
+    
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name='description' content="A web form which allows users to lookup the location of an ip address" />
+    
+        <!-- Enable Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+        <!-- Download Poppins Font -->
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+
+        <!-- HTMX & head-support installs -->
+        <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+        <script src="https://unpkg.com/htmx.org/dist/ext/head-support.js"></script>
+
+        <link href="static/base.css" rel="stylesheet"/>
+        <script src="static/bundle.js"></script>
+    </head>
+    <body hx-ext="head-support">
+        <h1>This is an app!</h1>
+    </body>
 </html>
