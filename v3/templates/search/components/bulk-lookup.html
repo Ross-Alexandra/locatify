@@ -4,7 +4,10 @@
     hx-get="/results"
     hx-trigger="submit"
     hx-target="main"
-    hx-swap="innerHTML"    
+    hx-swap="innerHTML"
+    x-data="{ ipGroups: [] }"
+    @clear-ip-groups="ipGroups = []"
+    @new-ip-group="ipGroups.push({ ip: $event.detail.ip, label: $event.detail.label, _id: Math.random() })"
 >
     <h3>Bulk Lookup</h3>
     <p>
@@ -12,7 +15,7 @@
     </p>
 
     <div class='file-uploader' aria-role="button" aria-label="File Upload">
-        <input type="file" @change="onUploadCSV(this)" />
+        <input type="file" @change="$dispatch('clear-ip-groups'); window.locatify.parseLocatifyCsv($el)" />
 
         <h4>Drag &amp; Drop</h4>
         <x-icon size="24" icon="file-upload"></x-icon>
@@ -20,17 +23,30 @@
 
     <a class="csv-sample" href="/example.csv">Download Sample</a>
 
-    <div class='ip-table' data-visible="false">
+    <div
+        class='ip-table'
+        x-bind:data-visible="ipGroups.length > 0"
+    >
         <div class='input-row header'>
             <h4>IP</h4>
             <h4>Label</h4>
         </div>
-        <x-input-groups default-empty>
+        <template x-for="(ipGroup, index) in ipGroups" :key="ipGroup._id">
             <div class='input-row'>
-                <input type="text" name="ip[0][ip]" readonly value="" />
-                <input type="text" name="ip[0][label]" readonly value="" />
+                <input
+                    readonly
+                    type="text"
+                    x-bind:value="ipGroup.ip"
+                    x-bind:name="`ip[${index}][ip]`"
+                />
+                <input
+                    readonly
+                    type="text"
+                    x-bind:value="ipGroup.label"
+                    x-bind:name="`ip[${index}][label]`"
+                />
             </div>
-        </x-input-groups>
+        </template>
     </div>
 
     <div class="actions">
@@ -41,7 +57,7 @@
             <x-icon size="24" icon="manual"></x-icon>
             Manual
         </button>
-        <button type="submit" disabled>
+        <button type="submit" x-bind:disabled="ipGroups.length === 0">
             <x-icon size="24" icon="search"></x-icon>
             Search
         </button>

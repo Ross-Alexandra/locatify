@@ -4,43 +4,55 @@
         hx-trigger="submit"
         hx-target="main"
         hx-swap="innerHTML"
-        @input-groups-empty="htmx.find('button[type=submit]').disabled = true"
-        @input-groups-not-empty="htmx.find('button[type=submit]').disabled = false"
+        x-data="{ ipGroups: [{
+                ip: '',
+                label: '',
+                _id: Math.random()
+            }]
+        }"
+        @new-ip-group="ipGroups.push({ip: '', label: '', _id: Math.random()})"
+        @remove-ip-group="ipGroups.splice($event.detail.index, 1)"
     >
         <h3>IP Lookup</h3>
         <p>
             Manually enter IP addresses, or use bulk lookup to upload a file of IP
             addresses.
         </p>
-        <x-input-groups class="ip-groups">
-            <div class="ip-group">
-                <input
-                    name="ip[0][ip]"
-                    type="text"
-                    placeholder="IP address"
-                    @keydown.enter.prevent
-                    required
-                />
-                <input
-                    name="ip[0][label]"
-                    type="text"
-                    placeholder="Label"
-                    @keydown.enter.prevent
-                />
-                <button
-                    class="remove-ip icon"
-                    aria-label="Remove"
-                    type="button"
-                >
-                    <x-icon size="24" icon="remove"></x-icon>
-                </button>
-            </div>
-        </x-input-groups>
+        <div class="ip-groups">
+            <template x-for="(ipGroup, index) in ipGroups" :key="ipGroup._id">
+                <div class="ip-group">
+                    <input
+                        required
+                        type="text"
+                        placeholder="IP address"
+                        x-bind:name="`ip[${index}][ip]`"
+                        x-model="ipGroups[index].ip"
+                        @keydown.enter.prevent
+                    />
+                    <input
+                        type="text"
+                        placeholder="Label"
+                        x-bind:name="`ip[${index}][label]`"
+                        x-model="ipGroups[index].label"
+                        @keydown.enter.prevent
+                    />
+                    <button
+                        class="remove-ip icon"
+                        aria-label="Remove"
+                        type="button"
+                        @click="$dispatch('remove-ip-group', { index })"
+                    >
+                        <x-icon size="24" icon="remove"></x-icon>
+                    </button>
+                </div>
+            </template>
+        </div>
 
         <button
             class="add-ip icon"
             type="button"
             aria-label="Add New"
+            @click="$dispatch('new-ip-group')"
         >
             <x-icon size="24" icon="new-item"></x-icon>
         </button>
@@ -53,7 +65,11 @@
                 <x-icon size="24" icon="bulk"></x-icon>
                 Bulk
             </button>
-            <button type="submit">
+
+            <button
+                x-bind:disabled="ipGroups.length === 0"
+                type="submit"
+            >
                 <x-icon size="24" icon="search"></x-icon>
                 Search
             </button>

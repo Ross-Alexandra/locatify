@@ -109,8 +109,16 @@ form.bulk-search {
     align-self: start;
 }
 
-.ip-table[data-visible="false"] {
+.ip-table {
     display: none;
+    max-height: 50svh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--layer-color) var(--layer-color);
+}
+
+.ip-table[data-visible="true"] {
+    display: unset;
 }
 
 .input-row {
