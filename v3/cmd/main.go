@@ -69,7 +69,6 @@ func main() {
 	e.Static("/", "public")
 
 	e.GET("/", func(c echo.Context) error {
-
 		return c.Render(http.StatusOK, "search/index", IndexPage{
 			CopyrightYear: time.Now().Year(),
 		})
