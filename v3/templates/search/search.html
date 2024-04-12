@@ -1,7 +1,8 @@
 {{ define "search" }}
     {{ if .Routing.IsHTMX }}
-        <head>
-            {{ template "search/head" }}
+        <head hx-head="merge">
+            {{ template "base/head" . }}
+            {{ template "search/head" . }}
         </head>
     {{ end }}
 
@@ -41,6 +42,6 @@
     {{ template "search" . }}
 {{ end }}
 
-{{ block "base/head" . }}
+{{ block "base/content/head" . }}
     {{ template "search/head" . }}
 {{ end }}

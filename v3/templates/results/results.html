@@ -1,9 +1,10 @@
 {{ define "results" }} 
-    <head>
-        <link href="static/search/results.css" rel="stylesheet" />
+    <head hx-head="merge">
+        {{ template "base/head" . }}
+        <link href="static/results/results.css" rel="stylesheet" />
     </head>
 
-    {{ range . }}
+    {{ range .IpAddresses }}
         <div style="color: white">{{ .Ip }}</div>
         <div style="color: white">{{ or .Label "No Label" }}</div>
     {{ end }}

@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -21,22 +22,27 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
 	return t.templates.ExecuteTemplate(w, name, data)
 }
 
-type Routing struct {
-	IsHTMX bool
-}
-
-type IndexPage struct {
-	Title         string
-	CopyrightYear int
-	Routing
-}
-
 type LookupIp struct {
 	Ip    string
 	Label string
 }
 
 type MMIp struct {
+}
+
+type Routing struct {
+	Title  string
+	IsHTMX bool
+}
+
+type IndexPage struct {
+	CopyrightYear int
+	Routing
+}
+
+type ResultsPage struct {
+	Routing
+	IpAddresses []LookupIp
 }
 
 func getTemplates(basePath string) []string {
@@ -97,7 +103,12 @@ func main() {
 			}
 		}
 
-		return c.Render(http.StatusOK, "results", ipAddresses)
+		return c.Render(http.StatusOK, "results", ResultsPage{
+			Routing: Routing{
+				Title: "Locatify - " + strconv.Itoa(len(ipAddresses)) + " IPs Parsed",
+			},
+			IpAddresses: ipAddresses,
+		})
 	})
 
 	e.Logger.Fatal(e.Start(":34343"))
