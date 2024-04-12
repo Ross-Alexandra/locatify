@@ -31,6 +31,14 @@ type IndexPage struct {
 	Routing
 }
 
+type LookupIp struct {
+	Ip    string
+	Label string
+}
+
+type MMIp struct {
+}
+
 func getTemplates(basePath string) []string {
 	templateFiles := make([]string, 0)
 	err := filepath.Walk(basePath, func(path string, info os.FileInfo, err error) error {
@@ -72,6 +80,24 @@ func main() {
 		return c.Render(http.StatusOK, "search/index", IndexPage{
 			CopyrightYear: time.Now().Year(),
 		})
+	})
+
+	e.GET("/results", func(c echo.Context) error {
+		formParams, err := c.FormParams()
+		if err != nil {
+			e.Logger.Fatal("Received error from form params: ", err)
+			return c.NoContent(http.StatusBadRequest)
+		}
+
+		ipAddresses := make([]LookupIp, len(formParams["ip"]))
+		for i := range len(formParams["ip"]) {
+			ipAddresses[i] = LookupIp{
+				Ip:    formParams["ip"][i],
+				Label: formParams["label"][i],
+			}
+		}
+
+		return c.Render(http.StatusOK, "results", ipAddresses)
 	})
 
 	e.Logger.Fatal(e.Start(":34343"))

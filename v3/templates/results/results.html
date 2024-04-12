@@ -1,0 +1,10 @@
+{{ define "results" }} 
+    <head>
+        <link href="static/search/results.css" rel="stylesheet" />
+    </head>
+
+    {{ range . }}
+        <div style="color: white">{{ .Ip }}</div>
+        <div style="color: white">{{ or .Label "No Label" }}</div>
+    {{ end }}
+{{ end }}

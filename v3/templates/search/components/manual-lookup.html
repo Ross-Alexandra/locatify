@@ -25,14 +25,14 @@
                         required
                         type="text"
                         placeholder="IP address"
-                        x-bind:name="`ip[${index}][ip]`"
+                        name="ip"
                         x-model="ipGroups[index].ip"
                         @keydown.enter.prevent
                     />
                     <input
                         type="text"
                         placeholder="Label"
-                        x-bind:name="`ip[${index}][label]`"
+                        name="label"
                         x-model="ipGroups[index].label"
                         @keydown.enter.prevent
                     />
