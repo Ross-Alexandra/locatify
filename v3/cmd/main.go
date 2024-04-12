@@ -8,8 +8,6 @@ import (
 	"path/filepath"
 	"time"
 
-	"strings"
-
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
@@ -55,7 +53,6 @@ func getTemplates(basePath string) []string {
 
 func main() {
 	templateFiles := getTemplates("templates")
-	println("found template files: ", strings.Join(templateFiles, ", "))
 
 	t := &Template{
 		templates: template.Must(template.ParseFiles(templateFiles...)),
