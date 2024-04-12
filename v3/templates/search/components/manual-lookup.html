@@ -32,7 +32,7 @@
                     aria-label="Remove"
                     type="button"
                 >
-                    [remove icon]
+                    <x-icon size="24" icon="remove"></x-icon>
                 </button>
             </div>
         </x-input-groups>
@@ -42,7 +42,7 @@
             type="button"
             aria-label="Add New"
         >
-           [new icon]
+            <x-icon size="24" icon="new-item"></x-icon>
         </button>
 
         <div class="actions">
@@ -50,11 +50,11 @@
                 class="search-type-swap secondary"
                 type="button"
                 @click="$dispatch('search-type-swap', {searchType: 'bulk'})">
-                [bulk icon]
+                <x-icon size="24" icon="bulk"></x-icon>
                 Bulk
             </button>
             <button type="submit">
-                [search icon]
+                <x-icon size="24" icon="search"></x-icon>
                 Search
             </button>
         </div>

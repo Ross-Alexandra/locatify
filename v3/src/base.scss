@@ -112,7 +112,7 @@ a.button {
     color: var(--background-color);
     border: 1px solid var(--border-color);
 
-    & > svg > * {
+    & svg > * {
         --svg-stroke: var(--background-color);
     }
 
@@ -121,7 +121,7 @@ a.button {
         color: var(--primary-color);
         border: 1px solid var(--primary-color);
 
-        & > svg > * {
+        & svg > * {
             --svg-stroke: var(--primary-color);
         }
     }
@@ -132,7 +132,7 @@ a.button {
         border: 0px;
         padding: 0px 10px 0px 10px;
 
-        & > svg > * {
+        & svg > * {
             --svg-stroke: var(--text-color);
         }
     }

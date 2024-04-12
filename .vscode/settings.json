@@ -1,0 +1,13 @@
+{
+    "cSpell.words": [
+        "gommon",
+        "HTMX",
+        "labstack",
+        "Locatify",
+        "mmdb",
+        "Symfony"
+    ],
+    "html.customData": [ 
+        "./v3/src/web-components/icon/html.html-data.json"
+    ]
+}

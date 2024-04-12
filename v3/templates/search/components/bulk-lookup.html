@@ -15,7 +15,7 @@
         <input type="file" @change="onUploadCSV(this)" />
 
         <h4>Drag &amp; Drop</h4>
-        [File Upload Icon]
+        <x-icon size="24" icon="file-upload"></x-icon>
     </div>
 
     <a class="csv-sample" href="/example.csv">Download Sample</a>
@@ -38,11 +38,11 @@
             class="search-type-swap secondary"
             type="button"
             @click="$dispatch('search-type-swap', { searchType: 'manual' })">
-            [manual icon]
+            <x-icon size="24" icon="manual"></x-icon>
             Manual
         </button>
         <button type="submit" disabled>
-            [search icon]
+            <x-icon size="24" icon="search"></x-icon>
             Search
         </button>
     </div>

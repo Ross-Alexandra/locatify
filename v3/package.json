@@ -6,21 +6,21 @@
   "scripts": {
     "build:css": "sass --no-source-map src/styles:dist",
     "build:js": "webpack --mode production",
-    "build:go": "go build -o server cmd/main.go", 
+    "build:go": "go build -o server cmd/main.go",
     "build": "npm run build:css && npm run build:js && npm run build:go",
-
     "dev:css": "sass --watch --no-source-map src:dist",
     "dev:js": "webpack --watch --mode development",
     "dev:go": "air",
     "dev": "concurrently --kill-others 'npm run dev:css' 'npm run dev:js' 'npm run dev:go'",
-    
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^8.2.2",
+    "html-loader": "^5.0.0",
     "sass": "^1.74.1",
+    "ts-loader": "^9.5.1",
     "typescript": "^5.4.5",
     "webpack": "^5.91.0",
     "webpack-cli": "^5.1.4"
