@@ -1,0 +1,8 @@
+{{ define "search/bulk-lookup" }}
+    <div style="color: gray">Bulk</div>
+    <button
+        type="button"
+        @click="$dispatch('search-type-swap', { searchType: 'manual' })">
+        Manual
+    </button>
+{{ end }}

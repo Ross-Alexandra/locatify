@@ -1,0 +1,17 @@
+.search-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 100%;
+}
+
+#search-panel {
+    background-color: var(--layer-color);
+    border-radius: var(--border-radius);
+    padding: 15px;
+
+    width: 400px;
+
+    backdrop-filter: grayscale(100%);
+}

@@ -1,10 +1,11 @@
+{{ define "base/index" }}
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>
-            {{ or .value "Locatify - IP Lookup" }}
+            {{ or .Title "Locatify - IP Lookup" }}
         </title>
 
         <meta charset="UTF-8" />
@@ -28,13 +29,45 @@
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 
         <!-- HTMX & head-support installs -->
-        <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-        <script src="https://unpkg.com/htmx.org/dist/ext/head-support.js"></script>
+        <script src="https://unpkg.com/htmx.org@1.9.11" integrity="sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/htmx.org@1.9.11/dist/ext/head-support.js"></script>
+
+        <!-- Alpine.js install -->
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
         <link href="static/base.css" rel="stylesheet"/>
         <script src="static/bundle.js"></script>
+
+        {{ block "base/head" . }}
+        {{ end }}
     </head>
     <body hx-ext="head-support">
-        <h1>This is an app!</h1>
+        <nav>
+            <div class="nav-contents">
+                <a href="/">
+                    <img
+                        height="60px"
+                        src="assets/locatify.png"
+                        alt="Locatify Logo"
+                    >
+                </a>
+            </div>
+        </nav>
+        <main>
+            {{ block "base/content" . }}
+                <div style="color: white">
+                    We&apos;re not sure how you got here...
+                    <a href="/">Go home</a>
+                </div>
+            {{ end }}
+        </main>
+        <footer>
+            <div class="footer-contents">
+                <p>
+                    &copy; {{ .CopyrightYear }} Ross Alexandra
+                </p>
+            </div>
+        </footer>
     </body>
 </html>
+{{ end }}

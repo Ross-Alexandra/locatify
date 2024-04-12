@@ -9,7 +9,7 @@
     "build:go": "go build -o server cmd/main.go", 
     "build": "npm run build:css && npm run build:js && npm run build:go",
 
-    "dev:css": "sass --watch --no-source-map src/styles:dist",
+    "dev:css": "sass --watch --no-source-map src:dist",
     "dev:js": "webpack --watch --mode development",
     "dev:go": "air",
     "dev": "concurrently --kill-others 'npm run dev:css' 'npm run dev:js' 'npm run dev:go'",

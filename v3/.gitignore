@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 
 # Go
-tmp
+tmp/

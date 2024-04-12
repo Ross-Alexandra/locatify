@@ -1,0 +1,245 @@
+$theme: (
+  colors: (
+    background: '#1a1a1d',
+    text: '#f5f5f5',
+    svgStroke: '#f5f5f5',
+    primary: '#5b9cff',
+    error: #dc3545,
+    warning: #ffc107,
+    layer: 'rgba(255, 255, 255, 0.1)',
+    border: 'rgba(255, 255, 255, 0.2)',
+    focusOutline: '#ffbe5b',
+  ),
+  sizing: (
+    borderRadius: 10px,
+    borderRadiusSmall: 3px,
+    primaryHeading: 2.5rem,
+    sectionHeading: 2rem,
+    subHeading: 1.5rem,
+    paragraph: 1rem
+  ),
+  fonts: (
+    primary: "'Poppins', sans-serif"
+  )
+);
+
+@function get-color($color) {
+  @return map-get(map-get($theme, colors), $color);
+}
+
+@function get-sizing($size) {
+  @return map-get(map-get($theme, sizing), $size);
+}
+
+@function get-font($font) {
+  @return map-get(map-get($theme, fonts), $font);
+}
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    --background-color: #{get-color(background)};
+    --text-color: #{get-color(text)};
+    --svg-stroke: #{get-color(svgStroke)};
+    --primary-color: #{get-color(primary)};
+    --error-color: #{get-color(error)};
+    --warning-color: #{get-color(warning)};
+    --focus-outline: #{get-color(focusOutline)};
+
+    --layer-color: #{get-color(layer)};
+    --border-color: #{get-color(border)};
+
+    --primary-font: #{get-font(primary)};
+
+    --primary-body-font-size: #{get-sizing(paragraph)};
+    --primary-heading-font-size: #{get-sizing(primaryHeading)};
+    --section-heading-font-size: #{get-sizing(sectionHeading)};
+    --sub-heading-font-size: #{get-sizing(subHeading)};
+    --border-radius: #{get-sizing(borderRadius)};
+    --border-radius-small: #{get-sizing(borderRadiusSmall)};
+}
+
+body {
+    margin: unset;
+    padding: unset;
+
+    min-height: 100svh;
+    background-color: var(--background-color);
+
+    overflow: hidden;
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+th,
+td
+button {
+    /* Default styling for text within the app */
+    margin: unset;
+
+    color: var(--text-color);
+    font-family: var(--primary-font);
+    font-size: var(--primary-body-font-size);
+}
+
+button,
+a.button {
+    appearance: none;
+    outline: transparent;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+
+    padding: 5px 10px;
+    border-radius: var(--border-radius);
+
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    border: 1px solid var(--border-color);
+
+    & > svg > * {
+        --svg-stroke: var(--background-color);
+    }
+
+    &.secondary {
+        background-color: var(--background-color);
+        color: var(--primary-color);
+        border: 1px solid var(--primary-color);
+
+        & > svg > * {
+            --svg-stroke: var(--primary-color);
+        }
+    }
+
+    &.icon {
+        background-color: transparent;
+        color: var(--text-color);
+        border: 0px;
+        padding: 0px 10px 0px 10px;
+
+        & > svg > * {
+            --svg-stroke: var(--text-color);
+        }
+    }
+
+    text-transform: capitalize;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: filter 0.2s ease-in-out;
+    &:hover {
+        filter: brightness(1.2);
+    }
+
+    &:active {
+        filter: brightness(0.8);
+    }
+
+    &:disabled {
+        filter: grayscale(1);
+        cursor: not-allowed;
+    }
+
+    &:focus-visible {
+        outline: 3px solid var(--focus-outline);
+    }
+}
+
+input[type="text"] {
+    appearance: none;
+    outline: transparent;
+
+    padding: 5px 15px;
+    border-radius: var(--border-radius-small);
+
+    border: 1px solid var(--border-color);
+    background-color: var(--layer-color);
+    color: var(--text-color);
+
+    &:focus {
+        border-color: var(--primary-color);
+    }
+
+    &:invalid {
+        border-color: var(--error-color);
+    }
+}
+
+h1 {
+    font-size: var(--primary-heading-font-size);
+    font-weight: 700;
+}
+
+h2 {
+    font-size: var(--section-heading-font-size);
+    font-weight: 700;
+}
+
+h3 {
+    font-size: var(--sub-heading-font-size);
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+
+    background-image: url('https://source.unsplash.com/Xu4Pz7GI9JY');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    backdrop-filter: blur(5px);
+
+    display: flex;
+    flex-direction: column;
+}
+
+nav {
+    width: 100vw;
+
+    & > .nav-contents {
+        max-width: 1920px;
+        margin-inline: auto;
+        padding: 10px 20px;
+
+        & > a {
+            display: contents;
+        }
+    }
+}
+
+main {
+    flex: 1 1 0;
+    overflow-y: auto;
+}
+
+footer {
+    background-color: var(--layer-color);
+
+    & > .footer-contents {
+        max-width: 1920px;
+        margin-inline: auto;
+        padding: 10px 20px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
