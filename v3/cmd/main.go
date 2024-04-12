@@ -33,9 +33,9 @@ type IndexPage struct {
 	Routing
 }
 
-func getTemplates() []string {
+func getTemplates(basePath string) []string {
 	templateFiles := make([]string, 0)
-	err := filepath.Walk("templates", func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk(basePath, func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() || len(path) < 5 {
 			return nil
 		}
@@ -54,7 +54,7 @@ func getTemplates() []string {
 }
 
 func main() {
-	templateFiles := getTemplates()
+	templateFiles := getTemplates("templates")
 	println("found template files: ", strings.Join(templateFiles, ", "))
 
 	t := &Template{
