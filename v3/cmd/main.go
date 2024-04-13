@@ -130,8 +130,19 @@ func main() {
 	e.Static("/", "public")
 
 	e.GET("/", func(c echo.Context) error {
-		return c.Render(http.StatusOK, "search/index", IndexPage{
+		isHTMX := len(c.Request().Header.Get("hx-request")) > 0
+		var route string
+		if isHTMX {
+			route = "search"
+		} else {
+			route = "search/index"
+		}
+
+		return c.Render(http.StatusOK, route, IndexPage{
 			CopyrightYear: time.Now().Year(),
+			Routing: Routing{
+				IsHTMX: isHTMX,
+			},
 		})
 	})
 
