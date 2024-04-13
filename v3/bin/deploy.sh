@@ -7,10 +7,10 @@ fi
 
 # Verify that the `locatify` ssh Host has been set
 if ssh -q locatify-v3 exit; then
-    echo "Deploying to locatify..."
+    echo "Deploying to locatify-v3..."
 else
     echo "Please add the following to your ~/.ssh/config file:"
-    echo "Host locatify"
+    echo "Host locatify-v3"
     echo "    HostName <deployment-server-ip>"
     echo "    User <deployment-user>"
     echo "    IdentityFile <path-to-private-key>"
@@ -18,7 +18,7 @@ else
 fi
 
 # Verify that the deployment server has rsync installed
-if ssh locatify 'command -v rsync' > /dev/null; then
+if ssh locatify-v3 'command -v rsync' > /dev/null; then
     echo "rsync found on deployment server."
 else
     echo "Please install rsync on the deployment server."
@@ -57,7 +57,7 @@ ssh locatify-v3 'cd ~/locatify-v3; crontab -r ; crontab -l | { cat; echo "0 0 * 
 
 # Manually download the MaxMind DB file
 echo 'Manually fetching the mmdb database.';
-ssh locatify 'cd ~/locatify-v3; ./fetch-database;';
+ssh locatify-v3 'cd ~/locatify-v3; ./fetch-database;';
 
 # Stop the old server
 echo "Killing old server..."
