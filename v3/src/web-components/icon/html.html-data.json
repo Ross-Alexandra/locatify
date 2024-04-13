@@ -1,0 +1,44 @@
+{
+    "version": 1.1,
+    "tags": [
+      {
+        "name": "x-icon",
+        "description": "Creates an SVG icon",
+        "attributes": [{
+            "name": "size",
+            "description": "The size of the icon using CSS units"
+        }, {
+            "name": "color",
+            "description": "The color of the icon"
+        }, {
+            "name": "icon",
+            "description": "The size of the icon using CSS units",
+            "values": [{
+                "name": "accuracy"
+            }, {
+                "name": "bulk"
+            }, {
+                "name": "clock"
+            }, {
+                "name": "error"
+            }, {
+                "name": "file-upload"
+            }, {
+                "name": "location"
+            }, {
+                "name": "manual"
+            }, {
+                "name": "missing"
+            }, {
+                "name": "new-item"
+            }, {
+                "name": "postal-code"
+            }, {
+                "name": "remove"
+            }, {
+                "name": "search"
+            }]
+        }]
+      }
+    ]
+  }

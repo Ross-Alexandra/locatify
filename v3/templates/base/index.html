@@ -1,0 +1,39 @@
+{{ define "base/index" }}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {{ template "base/head" . }}
+
+        {{ block "base/content/head" . }}
+        {{ end }}
+    </head>
+    <body hx-ext="head-support">
+        <nav>
+            <div class="nav-contents">
+                <a href="/">
+                    <img
+                        height="60px"
+                        src="assets/locatify.png"
+                        alt="Locatify Logo"
+                    >
+                </a>
+            </div>
+        </nav>
+        <main>
+            {{ block "base/content" . }}
+                <div style="color: white">
+                    We&apos;re not sure how you got here...
+                    <a href="/">Go home</a>
+                </div>
+            {{ end }}
+        </main>
+        <footer>
+            <div class="footer-contents">
+                <p>
+                    &copy; {{ .CopyrightYear }} Ross Alexandra
+                </p>
+            </div>
+        </footer>
+    </body>
+</html>
+{{ end }}

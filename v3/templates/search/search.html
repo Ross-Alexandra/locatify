@@ -1,0 +1,47 @@
+{{ define "search" }}
+    {{ if .Routing.IsHTMX }}
+        <head hx-head="merge">
+            {{ template "base/head" . }}
+            {{ template "search/head" . }}
+        </head>
+    {{ end }}
+
+    <div class="search-container">
+        <div
+            id="search-panel"
+            x-data="{ searchType: 'manual' }"
+            @search-type-swap="searchType = $event.detail.searchType"
+        >
+            <div
+                x-show="searchType === 'manual'"
+                class="manual-search-panel">
+                {{ template "search/manual-lookup" . }}
+            </div>
+            <div
+                x-show="searchType === 'bulk'"
+                class="bulk-search-panel">
+                {{ template "search/bulk-lookup" . }}
+            </div>
+        </div>
+    </div>
+{{ end }}
+
+{{ define "search/head" }}
+    <link href="static/search/search.css" rel="stylesheet" />
+{{ end }}
+
+{#
+    Define an index template which will override the
+    content & head blocks from the base index.
+#}
+{{ define "search/index" }}
+    {{ template "base/index" . }}
+{{ end }}
+
+{{ block "base/content" . }}
+    {{ template "search" . }}
+{{ end }}
+
+{{ block "base/content/head" . }}
+    {{ template "search/head" . }}
+{{ end }}

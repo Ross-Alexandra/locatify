@@ -1,0 +1,66 @@
+{{ define "search/bulk-lookup" }}
+<form
+    class="bulk-search"
+    hx-get="/results"
+    hx-trigger="submit"
+    hx-target="main"
+    hx-swap="innerHTML"
+    x-data="{ ipGroups: [] }"
+    @clear-ip-groups="ipGroups = []"
+    @new-ip-group="ipGroups.push({ ip: $event.detail.ip, label: $event.detail.label, _id: Math.random() })"
+>
+    <h3>Bulk Lookup</h3>
+    <p>
+        Upload a file containing many IPs to search.
+    </p>
+
+    <div class='file-uploader' aria-role="button" aria-label="File Upload">
+        <input type="file" @change="$dispatch('clear-ip-groups'); window.locatify.parseLocatifyCsv($el)" />
+
+        <h4>Drag &amp; Drop</h4>
+        <x-icon size="24" icon="file-upload"></x-icon>
+    </div>
+
+    <a class="csv-sample" href="/example.csv">Download Sample</a>
+
+    <div
+        class='ip-table'
+        x-bind:data-visible="ipGroups.length > 0"
+    >
+        <div class='input-row header'>
+            <h4>IP</h4>
+            <h4>Label</h4>
+        </div>
+        <template x-for="(ipGroup, index) in ipGroups" :key="ipGroup._id">
+            <div class='input-row'>
+                <input
+                    readonly
+                    type="text"
+                    x-bind:value="ipGroup.ip"
+                    name="ip"
+                />
+                <input
+                    readonly
+                    type="text"
+                    x-bind:value="ipGroup.label"
+                    name="label"
+                />
+            </div>
+        </template>
+    </div>
+
+    <div class="actions">
+        <button
+            class="search-type-swap secondary"
+            type="button"
+            @click="$dispatch('search-type-swap', { searchType: 'manual' })">
+            <x-icon size="24" icon="manual"></x-icon>
+            Manual
+        </button>
+        <button type="submit" x-bind:disabled="ipGroups.length === 0">
+            <x-icon size="24" icon="search"></x-icon>
+            Search
+        </button>
+    </div>
+</form>
+{{ end }}

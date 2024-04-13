@@ -1,0 +1,73 @@
+{{ define "results" }} 
+    <head hx-head="merge">
+        {{ template "base/head" . }}
+        <link href="static/results/results.css" rel="stylesheet" />
+    </head>
+
+    <div class="results-container">
+        {{ range .IpAddresses }}
+            {{ $ip := .Ip }}
+            {{ $label := .Label }}
+
+            {{ $city := .Record.city.name  }}
+            {{ $city := or $city .Record.city.names.en }}
+            {{ $city := or $city "Unknown City" }}
+
+            {{ $country := or .Record.country.iso_code "Unknown Country" }}
+
+            {{ $postal := or .Record.postal.code "Unknown" }}
+
+            {{ $latitude := or .Record.location.latitude 0 }}
+
+            {{ $longitude := or .Record.location.longitude 0 }}
+
+            {{ $accuracy := or .Record.location.accuracy_radius "Unknown" }}
+
+            {{ $timezone := or .Record.location.time_zone "Unknown" }}
+
+            <div class="result">
+                {{ if and $latitude $longitude}}
+                    <iframe
+                        title="Google Maps"
+                        src="https://maps.google.com/maps?output=embed&q={{ $latitude }},{{ $longitude }}"
+                    ></iframe>
+                {{ end }}
+    
+                {{ if $label }}
+                    <h3>{{ $label }} ({{ $ip }})</h2>
+                {{ else }}
+                    <h3>{{ $ip }}</h4>
+                {{ end }}
+                <div>
+                    <x-icon size="20" title="Location" icon="location"></x-icon>
+                    <h4>{{ $city }}, {{ $country }}</h4>
+                </div>
+                <div>
+                    <x-icon size="20" title="Postal Code" icon="postal-code"></x-icon>
+                    <p>{{ $postal }}</p>
+                </div>
+                <div>
+                    <x-icon size="20" title="Accuracy" icon="accuracy"></x-icon>
+                    {{ if $accuracy }}
+                        <p>{{ $accuracy }}km</p>
+                    {{ else }}
+                        <p>{{ $accuracy }} </p>
+                    {{ end }}
+                </div>
+                <div>
+                    <x-icon size="20" title="Local Time" icon="clock"></x-icon>
+                    <p>{{ as_time $timezone }}</p>
+                </div>
+            </div>
+        {{ end }}
+        <button
+            id="back"
+            class="seconary"
+            hx-get="/"
+            hx-trigger="click"
+            hx-target="main"
+        >
+            Back
+        </button>
+    </div>   
+{{ end }}
