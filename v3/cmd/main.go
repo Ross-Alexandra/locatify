@@ -57,7 +57,7 @@ func parseIpAddress(lookupIp LookupIp) (MMIp, error) {
 		return MMIp{}, err
 	}
 
-	db, err := maxminddb.Open(homeDir + "/locatify-v3/database.mmdb")
+	db, err := maxminddb.Open(homeDir + "/locatify-v3/db/database.mmdb")
 	if err != nil {
 		return MMIp{}, err
 	}
@@ -174,5 +174,5 @@ func main() {
 		})
 	})
 
-	e.Logger.Fatal(e.Start(":34343"))
+	e.Logger.Fatal(e.Start(":14010"))
 }

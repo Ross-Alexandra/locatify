@@ -1,11 +1,14 @@
 {
     "cSpell.words": [
+        "godotenv",
         "gommon",
         "HTMX",
+        "joho",
         "labstack",
         "Locatify",
         "mmdb",
-        "Symfony"
+        "Symfony",
+        "Typeflag"
     ],
     "html.customData": [ 
         "./v3/src/web-components/icon/html.html-data.json"

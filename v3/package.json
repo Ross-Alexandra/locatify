@@ -4,7 +4,7 @@
   "description": "",
   "private": true,
   "scripts": {
-    "build:css": "sass --no-source-map src/styles:dist",
+    "build:css": "sass --no-source-map src:dist",
     "build:js": "webpack --mode production",
     "build:go": "go build -o server cmd/main.go",
     "build": "npm run build:css && npm run build:js && npm run build:go",
