@@ -5,6 +5,7 @@ go 1.22.1
 require (
 	github.com/labstack/echo/v4 v4.11.4
 	github.com/labstack/gommon v0.4.2
+	github.com/oschwald/maxminddb-golang v1.12.0
 )
 
 require (

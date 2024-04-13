@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"io"
+	"net"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -12,6 +14,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
+	"github.com/oschwald/maxminddb-golang"
 )
 
 type Template struct {
@@ -28,6 +31,9 @@ type LookupIp struct {
 }
 
 type MMIp struct {
+	Ip     string
+	Label  string
+	Record any
 }
 
 type Routing struct {
@@ -42,7 +48,36 @@ type IndexPage struct {
 
 type ResultsPage struct {
 	Routing
-	IpAddresses []LookupIp
+	IpAddresses []MMIp
+}
+
+func parseIpAddress(lookupIp LookupIp) (MMIp, error) {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		return MMIp{}, err
+	}
+
+	db, err := maxminddb.Open(homeDir + "/locatify-v3/database.mmdb")
+	if err != nil {
+		return MMIp{}, err
+	}
+	defer db.Close()
+
+	ip := net.ParseIP(lookupIp.Ip)
+	label := lookupIp.Label
+
+	var record any
+	err = db.Lookup(ip, &record)
+	if err != nil {
+		return MMIp{}, err
+	}
+
+	return MMIp{
+		Ip:     lookupIp.Ip,
+		Label:  label,
+		Record: record,
+	}, nil
+
 }
 
 func getTemplates(basePath string) []string {
@@ -68,8 +103,20 @@ func getTemplates(basePath string) []string {
 func main() {
 	templateFiles := getTemplates("templates")
 
+	funcMap := template.FuncMap{
+		"as_time": func(timezone string) string {
+			loc, err := time.LoadLocation(timezone)
+			if err != nil {
+				return "Unknown"
+			}
+
+			now := time.Now().In(loc)
+			return fmt.Sprintf(now.Format("03:04 pm %s (-07:00)"), timezone)
+		},
+	}
+
 	t := &Template{
-		templates: template.Must(template.ParseFiles(templateFiles...)),
+		templates: template.Must(template.New("").Funcs(funcMap).ParseFiles(templateFiles...)),
 	}
 
 	e := echo.New()
@@ -95,11 +142,16 @@ func main() {
 			return c.NoContent(http.StatusBadRequest)
 		}
 
-		ipAddresses := make([]LookupIp, len(formParams["ip"]))
+		ipAddresses := make([]MMIp, len(formParams["ip"]))
 		for i := range len(formParams["ip"]) {
-			ipAddresses[i] = LookupIp{
+			ipAddresses[i], err = parseIpAddress(LookupIp{
 				Ip:    formParams["ip"][i],
 				Label: formParams["label"][i],
+			})
+
+			if err != nil {
+				e.Logger.Fatal("Received error while parsing maxmind DB: ", err)
+				return c.NoContent(http.StatusInternalServerError)
 			}
 		}
 
