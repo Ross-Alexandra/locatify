@@ -60,8 +60,9 @@ echo 'Manually fetching the mmdb database.';
 ssh locatify 'cd ~/locatify-v3; ./fetch-database;';
 
 # Stop the old server
+echo "Killing old server..."
 ssh locatify-v3 'fuser -k 14010/tcp';
 
 # Run the production server
-echo 'WARNING: Becasue the universe hates me, this command will *run* but not terminate. You will need to manuall ^C. Sorry about that.';
-ssh locatify-v3 "cd ~/locatify-v3; setsid ./server > /dev/null;";
+ssh locatify-v3 "cd ~/locatify-v3; setsid ./server 2>/dev/null >/dev/null </dev/null & disown $(pgrep server)";
+echo "Started"
