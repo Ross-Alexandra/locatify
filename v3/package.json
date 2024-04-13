@@ -12,6 +12,7 @@
     "dev:js": "webpack --watch --mode development",
     "dev:go": "air",
     "dev": "concurrently --kill-others 'npm run dev:css' 'npm run dev:js' 'npm run dev:go'",
+    "dev:fetch-database": "go run pkg/fetch-database/fetch-database.go",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
