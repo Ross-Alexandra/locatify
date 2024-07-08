@@ -1,7 +1,7 @@
 # Locatify
 ## V1
 The original version of this app was created as an interview assignment for
-a company I applied to. It was build using React on a Flack API. Additional
+a company I applied to in early 2023. It was build using React on a Flask API. Additional
 details can be found in the v1 directory.
 
 ## V2
